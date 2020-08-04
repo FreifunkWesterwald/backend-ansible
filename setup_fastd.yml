@@ -18,7 +18,7 @@
       - install_radvd
       - install_bind
       - install_wireguard
-      #- install_wireguard_mesh
+      - install_wireguard_mesh
       - install_wireguard_backbone
       - install_babeld
       - install_fastd
