@@ -1,12 +1,14 @@
-# ffww-ansible
-sets up ffww supernodes
+# Freifunk Westerwald Backend Ansible
+Ansible files to configure Freifunk super nodes on debian
 
-## usage
-- to install arch on hetzner vms run the bootstrap_arch playbook
+## Prepare
+Add a .ansible_vault file to the project and insert the secret.  
+Use ``ansible-vault encrypt_string`` to encrypt strings.
+
+## Usage
+To configure a node, add hosts to the inventory and specify the needed host and group vars.
+
+Start rollout with:
 ```
-ansible-playbook --vault-id @prompt -i inventory.ini bootstrap_arch.yml
-```
-- to configure the node run
-```
-ansible-playbook --vault-id @prompt -i inventory.ini setup_fastd.yml
+ansible-playbook -i inventory.ini setup_fastd.yml
 ```
