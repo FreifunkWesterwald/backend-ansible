@@ -22,10 +22,10 @@
       #- install_monitoring
       #- install_iperf3
       - install_admin_packages
-- name: basic uplink config
-  hosts: uplink
-  user: root
-  roles:
+#- name: basic uplink config
+#  hosts: uplink
+#  user: root
+#  roles:
 #      - configure_journald
 #      - configure_sysctl
 #      - configure_iptables
