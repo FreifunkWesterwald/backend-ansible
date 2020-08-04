@@ -1,0 +1,14 @@
+---
+- name: log to ramdisk
+  lineinfile:
+      path: /etc/systemd/journald.conf
+      regexp: '^#?Storage='
+      line: 'Storage=volatile'
+  notify: restart systemd-journald
+
+- name: save log for max 1 day
+  lineinfile:
+      path: /etc/systemd/journald.conf
+      regexp: '^#?MaxRetentionSec='
+      line: 'MaxRetentionSec=1day'
+  notify: restart systemd-journald

@@ -1,0 +1,12 @@
+{% for site in sites %}
+[fastd_peers_ff{{ site.name }}]
+user root
+group root
+env.socketfile /run/ff{{ site.name }}1.socket
+
+[fastd_traffic_ff{{ site.name }}]
+user root
+group root
+env.socketfile /run/ff{{ site.name }}1.socket
+
+{% endfor %}

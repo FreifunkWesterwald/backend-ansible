@@ -1,0 +1,18 @@
+---
+- name: install bind
+  apt:
+      name: bind9
+      update_cache: yes
+
+- name: create named zone backup folder
+  file:
+      path: /var/named/bak
+      state: directory
+      owner: bind
+      group: bind
+
+- name: bind config
+  template:
+      src: named.conf.j2
+      dest: /etc/bind/named.conf
+ # notify: reload bind9

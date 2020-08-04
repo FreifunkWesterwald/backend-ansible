@@ -1,0 +1,9 @@
+[Interface]
+ListenPort = {{ hostvars[item]['wireguard_bb_port'] }}
+PrivateKey = {{ wireguard_bb_priv_key }}
+
+[Peer]
+PublicKey = {{ hostvars[item]['wireguard_bb_pub_key'] }}
+AllowedIPs = 0.0.0.0/0,::/0
+Endpoint = [{{ hostvars[item]['wireguard_bb_endpoint'] }}]:{{ wireguard_bb_port }}
+PersistentKeepalive = 30

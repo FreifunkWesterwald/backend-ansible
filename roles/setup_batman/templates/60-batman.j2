@@ -1,0 +1,10 @@
+auto bat{{ item.name }}
+iface bat{{ item.name }} inet static
+    #address {{ item.bat_ipv4 }}/{{ item.bat_ipv4_cidr }}
+    address {{ item.bat_ipv4_z }}/{{ item.bat_ipv4_cidr_z }}
+iface bat{{ item.name }} inet6 static
+	address {{ item.bat_ipv6 }}/64
+pre-up /usr/sbin/batctl -m bat{{ item.name }} if add vpn{{ item.name }}
+up /usr/local/bin/ffww-iproute{{ item.name }}-up.sh
+down /usr/local/bin/ffww-iproute{{ item.name }}-down.sh
+

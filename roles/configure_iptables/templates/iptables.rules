@@ -1,0 +1,108 @@
+*mangle
+:PREROUTING ACCEPT [0:0]
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+{% if 'fastd' in group_names %}
+{% for site in sites %}
+-A PREROUTING -i bat{{ site.name }} -j MARK --set-xmark 0x1/0xffffffff
+{% endfor %}
+{% endif %}
+
+{% if 'fastd' in group_names %}
+{% for peer in groups['uplink'] %}
+-A PREROUTING -i bb{{ hostvars[peer]['wireguard_bb_name'] }} -j MARK --set-xmark 0x1/0xffffffff
+{% endfor %}
+{% endif %}
+{% if 'uplink' in group_names %}
+{% for peer in groups['fastd'] %}
+-A PREROUTING -i bb{{ hostvars[peer]['wireguard_bb_name'] }} -j MARK --set-xmark 0x1/0xffffffff
+{% endfor %}
+{% for peer in groups['nat64'] %}
+-A PREROUTING -i bb{{ hostvars[peer]['wireguard_bb_name'] }} -j MARK --set-xmark 0x1/0xffffffff
+{% endfor %}
+{% for peer in groups['uplink'] | difference([inventory_hostname]) %}
+-A PREROUTING -i bb{{ hostvars[peer]['wireguard_bb_name'] }} -j MARK --set-xmark 0x1/0xffffffff
+{% endfor %}
+{% for peer in wireguard_bb_peers %}
+-A PREROUTING -i bb{{ peer.name }} -j MARK --set-xmark 0x1/0xffffffff
+{% endfor %}
+{% endif %}
+{% if 'nat64' in group_names %}
+{% for peer in groups['uplink'] %}
+-A PREROUTING -i bb{{ hostvars[peer]['wireguard_bb_name'] }} -j MARK --set-xmark 0x1/0xffffffff
+{% endfor %}
+{% endif %}
+COMMIT
+*filter
+:INPUT DROP [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+-A INPUT -s 127.0.0.1/32 -j ACCEPT
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -p icmp -j ACCEPT
+
+# SSH-Server
+-A INPUT -p tcp -m tcp --dport 22 -j ACCEPT
+# iperf3
+-A INPUT -p tcp -m tcp -s 10.30.0.0/18 --dport 5201 -j ACCEPT
+-A INPUT -p tcp -m tcp -s 10.222.0.0/16 --dport 5201 -j ACCEPT
+
+{% if 'fastd' in group_names %}
+# dns
+-A INPUT -p tcp -m tcp --dport 53 -j ACCEPT
+-A INPUT -p udp -m udp --dport 53 -j ACCEPT
+#dhcp
+{% for site in sites %}
+-I INPUT -i bat{{ site.name }} -p udp --dport 67:68 --sport 67:68 -j ACCEPT
+{% endfor %}
+# ntp
+-A INPUT -p udp -m udp --dport 123 -j ACCEPT
+# fastd
+-A INPUT -s 10.30.0.0/18 -p udp -m udp --dport 10010:10023 -j DROP
+-A INPUT -s 10.222.0.0/16 -p udp -m udp --dport 10010:10023 -j DROP
+-A INPUT -p udp -m udp --dport 10000:10023 -j ACCEPT
+{% endif %}
+# MOSH
+-A INPUT -p udp -m udp --dport 60000:61000 -j ACCEPT
+
+{% if 'ffrl_uplink' in group_names %}
+# ffrl-gre
+{% for peer in ffrl_peers %}
+-A INPUT -p gre -s {{ peer.remote }} -j ACCEPT
+{% endfor %}
+# ffrl bgp
+{% for peer in ffrl_peers %}
+-A INPUT -i {{ peer.name }} -p tcp -m tcp --dport 179 -j ACCEPT
+{% endfor %}
+{% endif %}
+
+-A INPUT -m limit --limit 2/min -j LOG --log-prefix "IPTables-Dropped input: " --log-level 4
+
+{% if 'fastd' in group_names %}
+{% for site in sites %}
+-A FORWARD -i bat{{ site.name }} -p udp --dport 10000:10021 -j REJECT
+{% endfor %}
+{% endif %}
+-A FORWARD -o {{ ansible_default_ipv4.interface }} -j REJECT
+-A FORWARD -d 10.222.0.0/16 -p tcp -m tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -s 10.222.0.0/16 -p tcp -m tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -d 10.30.0.0/18 -p tcp -m tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -s 10.30.0.0/18 -p tcp -m tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+
+COMMIT
+*nat
+:PREROUTING ACCEPT [0:0]
+:INPUT ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+{% if 'ffrl_uplink' in group_names %}
+{% for peer in ffrl_peers %}
+-A POSTROUTING ! -s {{ ffrl_ip4 }} -o {{ peer.name }} -j SNAT --to-source {{ ffrl_ip4 }}
+{% endfor %}
+{% endif %}
+{% if 'mullvad_uplink' in group_names %}
+-A POSTROUTING -o mullvad -j MASQUERADE
+{% endif %}
+COMMIT

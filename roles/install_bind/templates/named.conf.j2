@@ -1,0 +1,104 @@
+// vim:set ts=4 sw=4 et:
+
+options {
+    directory "/var/cache/bind";
+    pid-file "/run/named/named.pid";
+
+    dnssec-enable yes;
+    dnssec-validation auto;
+
+    auth-nxdomain no;    # conform to RFC1035
+
+    listen-on-v6 {
+{% for site in sites %}
+        {{ site.bat_ipv6 }};
+{% endfor %}
+    };
+    listen-on port 53 {
+        127.0.0.1;
+{% for site in sites %}
+        {{ site.bat_ipv4 }};
+{% endfor %}
+    };
+
+    allow-recursion { 127.0.0.1; 10.222.0.0/16; 10.30.8.0/18; 2001:470:cd45:ff00::/56; 2a03:2260:1016::/48; };
+    allow-transfer { none; };
+
+    version none;
+    hostname none;
+    server-id none;
+};
+
+zone "localhost" IN {
+    type master;
+    file "localhost.zone";
+};
+
+zone "0.0.127.in-addr.arpa" IN {
+    type master;
+    file "127.0.0.zone";
+};
+
+zone "1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa" {
+    type master;
+    file "localhost.ip6.zone";
+};
+
+zone "255.in-addr.arpa" IN {
+    type master;
+    file "empty.zone";
+};
+
+zone "0.in-addr.arpa" IN {
+    type master;
+    file "empty.zone";
+};
+
+zone "ffaw" IN {
+    type slave;
+    file "bak/ffaw.zone";
+    allow-query { any; };
+    masters { 2a01:4f8:a0:826b:1::17; };
+};
+
+zone "ffcoc" IN {
+    type slave;
+    file "bak/ffcoc.zone";
+    allow-query { any; };
+    masters { 2a01:4f8:a0:826b:1::17; };
+};
+
+zone "ffems" IN {
+    type slave;
+    file "bak/ffems.zone";
+    allow-query { any; };
+    masters { 2a01:4f8:a0:826b:1::17; };
+};
+
+zone "ffko" IN {
+    type slave;
+    file "bak/ffko.zone";
+    allow-query { any; };
+    masters { 2a01:4f8:a0:826b:1::17; };
+};
+
+zone "ffmy" IN {
+    type slave;
+    file "bak/ffmy.zone";
+    allow-query { any; };
+    masters { 2a01:4f8:a0:826b:1::17; };
+};
+
+zone "ffmyk" IN {
+    type slave;
+    file "bak/ffmyk.zone";
+    allow-query { any; };
+    masters { 2a01:4f8:a0:826b:1::17; };
+};
+
+zone "ffsim" IN {
+    type slave;
+    file "bak/ffsim.zone";
+    allow-query { any; };
+    masters { 2a01:4f8:a0:826b:1::17; };
+};

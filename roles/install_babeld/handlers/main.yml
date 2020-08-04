@@ -1,0 +1,5 @@
+---
+- name: restart babeld
+  systemd:
+      name: babeld.service
+      state: restarted

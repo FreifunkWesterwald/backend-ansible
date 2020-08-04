@@ -1,0 +1,7 @@
+---
+- name: install ffmyk-influx
+  include: install_ffmyk-influx.yml
+  when: "'fastd' in group_names"
+
+- name: install munin
+  import_tasks: install_munin.yml

@@ -1,0 +1,30 @@
+---
+- name: install dhcp
+  apt:
+      name: isc-dhcp-server 
+      update_cache: yes
+#- name: create dhcp file for static ips
+#  copy:
+#      content: ''
+#      dest: /etc/dhcpd.hosts{{ item.name }}.conf
+#      force: no
+#  with_items: "{{ sites }}"
+#
+#- name: copy fastd-services-api.php
+#  copy:
+#      src: fastd-services-api.php
+#      dest: /etc/fastd-services-api.php
+#
+#- name: setup cronjob for fastd-services-api
+#  cron:
+#      name: fastd-services-api
+#      minute: '*/10'
+#      user: root
+#      cron_file: fastd-api
+#      job: '/usr/bin/php /etc/fastd-services-api.php'
+
+- name: dhcpd.conf
+  template:
+      src: dhcpd.conf.j2
+      dest: /etc/dhcp/dhcpd.conf
+#  notify: restart dhcpd4

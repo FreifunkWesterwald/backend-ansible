@@ -1,0 +1,124 @@
+#!/usr/bin/perl -w
+# -*- perl -*-
+
+=head1 NAME
+
+fastd_ - Plugin to monitor fastd uptime, peers and traffic
+
+=head1 CONFIGURATION
+
+Set user and group to have access to the socket
+Set path to socketfile if not /tmp/fastd.sock
+
+    [fastd_*]
+    user fastd
+    group fastd
+    env.socketfile /tmp/fastd.sock
+
+=head1 USAGE
+
+Link this plugin to /etc/munin/plugins/ with the type of graph (uptime, peers, traffic)
+append to the linkname, ie: /etc/munin/plugins/fastd_peers
+
+After creating the links, restart munin-node. Don't forget to configure the plugin!
+
+=head1 AUTHORS
+
+Dominique Goersch <mail@dgoersch.info>
+
+=head1 LICENSE
+
+GPLv2
+
+=head1 MAGIC MARKERS
+
+ #%# family=manual
+ #%# capabilities=suggest
+
+=cut
+
+
+use strict;
+use warnings;
+use File::Basename;
+use IO::Socket::UNIX qw( SOCK_STREAM );
+use JSON;
+
+my $mode = basename($0);                                                                #get basename
+$mode =~ s/fastd_//;                                                                    #and strip 'fastd_' to get the mode
+
+if ($ARGV[0] and $ARGV[0] eq "config") {                                                #config graph
+    if ($mode eq 'uptime') {                                                            #for uptime
+        print "graph_title fastd Uptime\n";
+        print "graph_info This graph shows the uptime of the fastd on this supernode\n";
+        print "graph_args -l 0\n";
+        print "graph_scale no\n";
+        print "graph_vlabel uptime in days\n";
+        print "graph_category fastd\n";
+        print "uptime.label uptime\n";
+        print "uptime.draw AREA\n";
+    }
+    elsif ($mode eq 'peers') {                                                          #for peers
+        print "graph_title fastd peers\n";
+        print "graph_info This graph shows the peers of the fastd on this supernode\n";
+        print "graph_args -l 0\n";
+        print "graph_scale no\n";
+        print "graph_vlabel peers count\n";
+        print "graph_category fastd\n";
+        print "peers.label peers\n";
+        print "peers.draw AREA\n";
+    }
+    elsif ($mode eq 'traffic') {                                                        #for traffic
+        print "graph_order down up\n";
+        print "graph_title fastd traffic\n";
+        print "graph_args --base 1000\n";
+        print "graph_vlabel bits in (-) / out (+) per second\n";
+        print "graph_category fastd\n";
+        print "graph_info This graph shows the traffic of fast.\n";
+        print "down.label received\n";
+        print "down.type DERIVE\n";
+        print "down.graph no\n";
+        print "down.cdef down,8,*\n";
+        print "down.min 0\n";
+        print "up.label bps\n";
+        print "up.type DERIVE\n";
+        print "up.negative down\n";
+        print "up.cdef up,8,*\n";
+        print "up.min 0\n";
+    }
+    exit 0;
+}
+
+if ($ARGV[0] and $ARGV[0] eq "suggest") {                                               #tell munin about our graphs
+    print "uptime\n";
+    print "peers\n";
+    print "traffic\n";
+}
+
+
+
+my $statusfile = exists $ENV{'socketfile'} ? $ENV{'socketfile'} : "/tmp/fastd.sock";    #get path to socket from environment or use default
+my $socket = IO::Socket::UNIX->new(Type => SOCK_STREAM,Peer => $statusfile)             #open socket
+   or die("Can't connect to server: $!\n");
+
+my $fastdstatus = "";
+foreach my $line (<$socket>) {$fastdstatus .= $line;}                                   #read contents from socket
+my $json = decode_json($fastdstatus);                                                   #decode json
+
+my $fastd_uptime     = $json->{uptime};                                                 #get the uptime from json
+#my $fastd_peers      = scalar(keys(%{$json->{peers}}));                                 #get number of peers from json
+my $fastd_peers = 0;
+for my $key (keys(%{$json->{peers}})) {
+	$fastd_peers = $fastd_peers + ($json->{peers}{$key}{connection}? 1 : 0);
+}
+my $fastd_rx_bytes   = $json->{statistics}->{rx}->{bytes};                              #get recieved bytes from json
+my $fastd_tx_bytes   = $json->{statistics}->{tx}->{bytes};                              #get transmittetd bytes from json
+
+if ( $mode eq 'uptime' ) {
+    printf "uptime.value %.0f\n",$fastd_uptime/86400000;                                #return uptime in seconds
+} elsif ($mode eq 'peers') {
+    print "peers.value $fastd_peers\n";                                                 #return number of peers
+} elsif ($mode eq 'traffic') {
+    print "up.value $fastd_tx_bytes\n";                                                 #return transmitted bytes
+    print "down.value $fastd_rx_bytes\n";                                               #and recieved bytes
+}

@@ -1,0 +1,7 @@
+---
+- name: update authorized_keys
+  authorized_key:
+      key: '{{ item }}'
+      path: /root/.ssh/authorized_keys
+      user: root
+  with_items: '{{ authorized_keys }}'

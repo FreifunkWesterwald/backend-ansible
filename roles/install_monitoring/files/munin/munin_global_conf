@@ -1,0 +1,8 @@
+[fw_*]
+  user root
+
+[if_en*]
+  env.speed 1000
+
+[dhcp-pool]
+  user dhcp

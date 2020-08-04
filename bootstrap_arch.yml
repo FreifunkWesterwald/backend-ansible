@@ -1,0 +1,15 @@
+---
+- name: reboot vserver into rescue image
+  hosts: new_fastds
+  connection: local
+  gather_facts: no
+  vars:
+      ansible_python_interpreter: /usr/bin/python
+  roles:
+      - role: boot-rescue
+
+- name: install archlinux
+  hosts: new_fastds
+  user: root
+  roles:
+      - role: install_arch

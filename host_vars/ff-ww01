@@ -1,0 +1,40 @@
+---
+ansible_host: 2a01:4f8:c2c:2d23::1 
+sites:
+  - name: 'ww01'
+    net4: '10.30.8.0/22'
+    net6: '2a03:2260:1016:0801::/64'
+    net4_z: '10.30.8.0/21'
+    net6_z: '2a03:2260:1016:0801::/58'
+    site_net6: 'fd62:44e1:da:800::/64'
+    fastd_secret: '***REMOVED***' 
+    fastd_mesh_mac: '02:ff:57:57:00:20'
+    fastd_port1: 10001
+    fastd_port2: 10002
+    bat_ipv6: '2a03:2260:1016:0801::1'
+    bat_ipv6_z: '2a03:2260:1016:0800::1'
+    bat_ipv4: '10.30.8.1'
+    bat_ipv4_cidr: 22
+    bat_ipv4_cidr_z: 21
+    bat_ipv4_z: '10.30.8.1'
+    bat_mac: '02:ff:57:57:ff:1'
+    dhcp_subnet: '10.30.8.0'
+    dhcp_netmask: '255.255.248.0'
+    dhcp_start: '10.30.8.50'
+    dhcp_end: '10.30.11.250'
+    wireguard_mesh_number: 1
+    wireguard_mesh_priv_key: 'WGbd9/VCQuK3bMJ/MQMYhiOgIqjj69d5lMBIoJmFR3E='
+    wireguard_mesh_pub_key: 'JOjY19USn8eQNefCYAOrdyGM35Fes35EOrDVdoL8sT8='
+    wireguard_mesh_port: 10057
+    wireguard_mesh_address: 'fdff:5757:bb::1'
+    wireguard_mesh_endpoint: '2a01:4f8:c2c:2d23::1'
+    wireguard_mesh_mac_prefix: '02:ff:57:57:00:1'
+wireguard_bb_name: 'ww01'
+wireguard_bb_endpoint: '2a01:4f8:c2c:2d23::1'
+wireguard_bb_priv_key: 'WGbd9/VCQuK3bMJ/MQMYhiOgIqjj69d5lMBIoJmFR3E='
+wireguard_bb_pub_key: 'JOjY19USn8eQNefCYAOrdyGM35Fes35EOrDVdoL8sT8='
+wireguard_bb_ipv4: '10.222.0.25'
+wireguard_bb_ipv6: 'fe80::ffbb:ffbb:25'
+wireguard_bb_port: 10125
+preferred_uplink: 'uplink1'
+

@@ -1,0 +1,28 @@
+---
+- name: name ffww routing table
+  lineinfile:
+      path: /etc/iproute2/rt_tables
+      line: 42 ffww
+
+- name: copy ffww iproute config script
+  copy:
+      src: ffww-iproute.sh
+      dest: /usr/local/bin/ffww-iproute.sh
+      mode: 0744
+
+- include_tasks: fastd_tasks.yml
+  when: "'fastd' in group_names"
+
+- name: copy ffww iproute systemd service
+  copy:
+      src: ffww-iproute.service
+      dest: /etc/systemd/system/ffww-iproute.service
+      mode: 0444
+
+- name: start and enable ffww iproute service
+  systemd:
+      name: ffww-iproute.service
+      daemon_reload: yes
+      enabled: yes
+      state: started
+

@@ -1,0 +1,9 @@
+---
+- name: reenable netctl
+  command: netctl reenable {{ item.name }}
+  with_items: "{{ ffrl_peers }}"
+
+- name: reload bird
+  systemd:
+      name: bird.service
+      state: reloaded

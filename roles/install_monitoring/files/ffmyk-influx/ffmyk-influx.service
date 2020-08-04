@@ -1,0 +1,10 @@
+[Unit]
+ 
+[Service]
+ExecStart=/opt/ffmyk-influx/daemon.sh
+Restart=always
+RestartSec=5
+ 
+[Install]
+WantedBy=multi-user.target
+

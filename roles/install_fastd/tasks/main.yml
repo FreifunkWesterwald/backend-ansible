@@ -1,0 +1,67 @@
+---
+- name: install fastd
+  apt:
+      name: fastd
+      update_cache: yes
+- name: create verify.sh
+  file:
+      src: verify.sh.j2
+      path: /etc/fastd/verify.sh
+      mode: 0744
+  with_items: "{{ sites }}"
+
+- name: create site folder
+  file:
+      path: /etc/fastd/ff{{ item.name }}
+      state: directory
+  with_items: "{{ sites }}"
+
+- name: fastd.conf
+  template:
+      src: fastd.conf.j2
+      dest: /etc/fastd/ff{{ item.name }}/fastd.conf
+      mode: 0640
+  #notify: restart fastd{{ item.name }}
+  with_items: "{{ sites }}"
+
+- name: add fastd bin folder
+  file:
+      path: /etc/fastd/ff{{ item.name }}/bin
+      state: directory
+  with_items: "{{ sites }}"
+
+- name: add fastd up script
+  template:
+      src: fastd_up.sh.j2
+      dest: /etc/fastd/ff{{ item.name }}/bin/up.sh
+      mode: 0744
+  #notify: restart fastd{{ item.name }}
+  with_items: "{{ sites }}"
+
+- name: add fastd peers folder
+  file:
+      path: /etc/fastd/ff{{ item.name }}/peers
+      state: directory
+  with_items: "{{ sites }}"
+
+- name: add fastd peer api script
+  template:
+      src: fastd-api.php.j2
+      dest: /etc/fastd/ff{{ item.name }}/bin/fastd-api.php
+  with_items: "{{ sites }}"
+
+- name: setup cronjob for fastd-api
+  cron:
+      name: fastd-api-{{ item.name }}
+      minute: '*/10'
+      user: root
+      cron_file: fastd-api
+      job: '/usr/bin/php /etc/fastd/ff{{ item.name }}/bin/fastd-api.php'
+  with_items: "{{ sites }}"
+
+- name: start and enable fastd service
+  systemd:
+      name: fastd@ff{{ item.name }}.service
+      enabled: yes
+      state: started
+  with_items: "{{ sites }}"

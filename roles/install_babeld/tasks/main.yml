@@ -1,0 +1,17 @@
+---
+- name: install fastd
+  apt:
+      name: babeld
+      update_cache: yes
+- name: babeld.conf
+  template:
+      src: babeld.conf.j2
+      dest: /etc/babeld.conf
+      mode: 0640
+  notify: restart babeld
+
+- name: start and enable babeld service
+  systemd:
+      name: babeld.service
+      enabled: yes
+      state: started

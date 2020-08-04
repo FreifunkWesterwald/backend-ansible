@@ -1,0 +1,15 @@
+[Unit]
+Description=sets up ip rules and static routes
+ConditionPathExists=/usr/local/bin/ffww-iproute.sh
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=forking
+ExecStart=/usr/local/bin/ffww-iproute.sh
+TimeoutSec=0
+StandardOutput=tty
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

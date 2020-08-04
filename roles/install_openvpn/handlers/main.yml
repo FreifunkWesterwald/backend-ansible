@@ -1,0 +1,5 @@
+---
+- name: restart openvpn
+  systemd:
+      name: openvpn-client@mullvad.service
+      state: restarted

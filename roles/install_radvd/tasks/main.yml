@@ -1,0 +1,16 @@
+---
+- name: install radvd
+  apt:
+      name: radvd
+      update_cache: yes
+- name: radvd config
+  template:
+      src: radvd.conf.j2
+      dest: /etc/radvd.conf
+  notify: restart radvd
+
+- name: start and enable radvd
+  systemd:
+      name: radvd.service
+      enabled: yes
+      state: started

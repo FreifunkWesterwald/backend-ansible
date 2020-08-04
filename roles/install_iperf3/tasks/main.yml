@@ -1,0 +1,16 @@
+---
+- name: install iperf3
+  pacman:
+      name: iperf3
+      state: present
+
+- name: copy iperf3 systemd-service
+  copy:
+      src: iperf3-tcp.service
+      dest: /etc/systemd/system/iperf3-tcp.service
+
+- name: start and enable iperf3 tcp
+  systemd:
+      name: iperf3-tcp.service
+      enabled: yes
+      state: started

@@ -1,0 +1,5 @@
+---
+- name: restart munin-node
+  systemd:
+      name: munin-node.service
+      state: restarted

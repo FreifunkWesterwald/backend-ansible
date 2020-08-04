@@ -1,0 +1,76 @@
+# Configuration for babeld. See the man page babeld(8) for
+# details on the configuration format.
+
+# Works on Linux > 3.11
+ipv6-subtrees true
+
+# You must provide at least one interface for babeld to operate on.
+{% if ('fastd' in group_names) or ('nat64' in group_names) %}
+{% for peer in groups['uplink'] %}
+interface bb{{ hostvars[peer]['wireguard_bb_name'] }}
+{% endfor %}
+{% endif %}
+{% if 'uplink' in group_names %}
+{% for peer in groups['fastd'] %}
+interface bb{{ hostvars[peer]['wireguard_bb_name'] }}
+{% endfor %}
+{% for peer in groups['nat64'] %}
+interface bb{{ hostvars[peer]['wireguard_bb_name'] }}
+{% endfor %}
+{% for peer in groups['uplink'] | difference([inventory_hostname]) %}
+interface bb{{ hostvars[peer]['wireguard_bb_name'] }}
+{% endfor %}
+{% for peer in wireguard_bb_peers|default([]) %}
+interface bb{{ peer.name }}
+{% endfor %}
+{% endif %}
+
+# Global options you might want to set. There are many more, see the man page.
+#debug 1
+local-port 33123
+#diversity true
+random-id true
+
+default type tunnel rtt-min 1 rtt-max 25 max-rtt-penalty 128
+smoothing-half-life 10
+
+export-table 42
+import-table 42
+
+reflect-kernel-metric true
+
+# Filtering rules.
+{% if 'uplink' in group_names %}
+in ip 10.30.0.0/18 allow
+in ip 10.222.0.0/16 allow
+in ip 2a03:2260:1016::/48 allow
+in ip 2003:46:e028::/48 allow # finzelberg
+in ip 64:ff9b::/96 allow # nat64
+in ip fd62:44e1:da::/48 allow
+in deny # ignore default routes on uplinks
+{% endif %}
+
+{% if 'mullvad_uplink' in group_names %}
+redistribute if mullvad metric 256
+{% endif %}
+{% if 'ffrl_uplink' in group_names %}
+{% for peer in ffrl_peers %}
+redistribute if {{ peer.name }} metric 128
+{% endfor %}
+{% endif %}
+# Only redistribute addresses from a given prefix, to avoid redistributing
+# all local addresses
+redistribute ip 10.30.0.0/18 allow
+redistribute ip 10.222.0.0/16 allow
+redistribute ip 2a03:2260:1016::/48 allow
+redistribute ip 64:ff9b::/96 allow
+redistribute ip fd62:44e1:da::/48 allow
+redistribute local deny
+
+{% if ('fastd' in group_names or 'nat64' in group_names) and preferred_uplink is defined %}
+{% for peer in groups['uplink'] %}
+{% if not hostvars[peer]['wireguard_bb_name'] == preferred_uplink %}
+in if bb{{ hostvars[peer]['wireguard_bb_name'] }} metric 64
+{% endif %}
+{% endfor %}
+{% endif %}

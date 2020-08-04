@@ -1,0 +1,25 @@
+---
+- name: install mesh-announce dependencies
+  apt:
+      name:
+          - git
+          - lsb-release
+          - ethtool
+      update_cache: yes
+
+- name: clone mesh-announce repo
+  git:
+      repo: https://github.com/FreifunkMYK/mesh-announce.git
+      dest: /opt/mesh-announce
+
+- name: create respondd service
+  template:
+      src: respondd.service.j2
+      dest: /etc/systemd/system/respondd.service
+      mode: 0644
+
+- name: start and enable respondd service
+  systemd:
+      name: respondd
+      state: started
+      enabled: yes

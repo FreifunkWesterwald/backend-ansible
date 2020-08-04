@@ -1,0 +1,28 @@
+---
+- name: create wireguard config for sites
+  template:
+      src: wg.conf.j2
+      dest: /etc/wireguard/wg{{ item.name }}.conf
+      mode: 0400
+  with_items: "{{ sites }}"
+
+- name: create wireguard up scripts for sites
+  template:
+      src: up.sh.j2
+      dest: /etc/wireguard/up{{ item.name }}.sh
+      mode: 0744
+  with_items: "{{ sites }}"
+
+- name: create wireguard down scripts for sites
+  template:
+      src: down.sh.j2
+      dest: /etc/wireguard/down{{ item.name }}.sh
+      mode: 0744
+  with_items: "{{ sites }}"
+
+- name: start and enable wireguard mesh
+  systemd:
+      name: wg-quick@wg{{ item.name }}.service
+      enabled: yes
+      state: started
+  with_items: "{{ sites }}"

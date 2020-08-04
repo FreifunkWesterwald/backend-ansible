@@ -1,0 +1,5 @@
+---
+- name: reload bind
+  systemd:
+      name: named.service
+      state: reloaded

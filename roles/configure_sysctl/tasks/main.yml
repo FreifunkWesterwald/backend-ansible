@@ -1,0 +1,22 @@
+---
+- name: load nf_conntrack kernel module at boot
+  copy:
+      src: modules-load.d_nf_conntrack.conf
+      dest: /etc/modules-load.d/nf_conntrack.conf
+
+- name: load nf_conntrack kernel module
+  modprobe:
+      name: nf_conntrack
+      state: present
+
+- name: touch sysctl.conf
+  copy:
+      content: ''
+      dest: /etc/sysctl.conf
+      force: no
+
+- name: copy ff.conf
+  copy:
+      src: ff.conf
+      dest: /etc/sysctl.d/ff.conf
+  notify: reload ff-sysctl

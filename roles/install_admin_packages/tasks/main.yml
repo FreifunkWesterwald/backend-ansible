@@ -1,0 +1,31 @@
+---
+- name: install packages for admins
+  apt:
+      name:
+        - bash-completion
+        - bridge-utils
+        - htop
+        - mosh
+        - nload
+        #- rxvt-unicode-terminfo
+        - screen
+        - tmux
+        - vim
+        - tcpdump
+      state: present
+
+- name: create bash_profile
+  lineinfile:
+      path: /root/.bash_profile
+      line: '[[ -f ~/.bashrc ]] && . ~/.bashrc'
+      create: yes
+
+- name: copy bashrc
+  copy:
+      src: bashrc
+      dest: /root/.bashrc
+
+- name: copy vimrc
+  copy:
+      src: vimrc
+      dest: /root/.vimrc

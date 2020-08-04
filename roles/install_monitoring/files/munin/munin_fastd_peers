@@ -1,0 +1,73 @@
+#!/usr/bin/perl -w
+# -*- perl -*-
+
+=head1 NAME
+
+fastd_peers_ - Plugin to monitor fastd peers
+
+=head1 CONFIGURATION
+
+Set user and group to have access to the socket
+Set path to socketfile if not /tmp/fastd.sock
+
+    [fastd_peers_*]
+    user fastd
+    group fastd
+    env.socketfile /tmp/fastd.sock
+
+=head1 USAGE
+
+Link this plugin to /etc/munin/plugins/
+
+After creating the links, restart munin-node. Don't forget to configure the plugin!
+
+=head1 AUTHORS
+
+Dominique Goersch <mail@dgoersch.info>
+Niklas Yann Wettengel <niyawe@niyawe.de>
+
+=head1 LICENSE
+
+GPLv2
+
+=head1 MAGIC MARKERS
+
+ #%# family=manual
+
+=cut
+
+
+use strict;
+use warnings;
+use File::Basename;
+use IO::Socket::UNIX qw( SOCK_STREAM );
+use JSON;
+
+if ($ARGV[0] and $ARGV[0] eq "config") {                                                #config graph
+	print "graph_title fastd peers\n";
+	print "graph_info This graph shows the peers of the fastd on this supernode\n";
+	print "graph_args -l 0\n";
+	print "graph_scale no\n";
+	print "graph_vlabel peers count\n";
+	print "graph_category fastd\n";
+	print "peers.label peers\n";
+	print "peers.draw AREA\n";
+    exit 0;
+}
+
+
+my $statusfile = exists $ENV{'socketfile'} ? $ENV{'socketfile'} : "/tmp/fastd.sock";    #get path to socket from environment or use default
+my $socket = IO::Socket::UNIX->new(Type => SOCK_STREAM,Peer => $statusfile)             #open socket
+   or die("Can't connect to server: $!\n");
+
+my $fastdstatus = "";
+foreach my $line (<$socket>) {$fastdstatus .= $line;}                                   #read contents from socket
+my $json = decode_json($fastdstatus);                                                   #decode json
+
+#my $fastd_peers      = scalar(keys(%{$json->{peers}}));                                 #get number of peers from json
+my $fastd_peers = 0;
+for my $key (keys(%{$json->{peers}})) {
+	$fastd_peers = $fastd_peers + ($json->{peers}{$key}{connection}? 1 : 0);
+}
+
+print "peers.value $fastd_peers\n";                                                 #return number of peers

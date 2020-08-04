@@ -1,0 +1,13 @@
+set tabstop=4
+set shiftwidth=4
+"set expandtab
+set number
+set autoindent
+set laststatus=2
+syntax on
+colorscheme darkblue
+
+set nocompatible               " be iMproved
+filetype off                   " required!
+
+filetype plugin indent on     " required!

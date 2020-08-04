@@ -1,0 +1,10 @@
+#!/bin/bash
+
+ip -4 route del {{item.net4 }} dev bat{{ item.name }} proto static table ffww
+ip -6 route del {{item.net6 }} dev bat{{ item.name }} proto static table ffww
+ip -6 route del {{item.site_net6 }} dev bat{{ item.name }} proto static table ffww
+
+ip -4 rule del iif bat{{ item.name }} table ffww
+ip -6 rule del iif bat{{ item.name }} table ffww
+ip -4 rule del from {{ item.net4 }} table ffww
+ip -6 rule del from {{ item.net6 }} table ffww

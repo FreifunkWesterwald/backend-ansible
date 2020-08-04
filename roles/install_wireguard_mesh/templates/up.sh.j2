@@ -1,0 +1,17 @@
+#!/bin/bash
+{% for host in groups['fastd'] %}
+{% for site in hostvars[host]['sites'] if site.name == item.name and site.wireguard_mesh_number != item.wireguard_mesh_number %}
+ip link add mesh{{ item.name }}{{ site.wireguard_mesh_number }} type ip6gretap remote {{ site.wireguard_mesh_address }} local {{ item.wireguard_mesh_address }} ttl 255 dev wg{{ item.name }}
+ip link set mtu 1312 dev mesh{{ item.name }}{{ site.wireguard_mesh_number }}
+ip link set address {{ item.wireguard_mesh_mac_prefix }}{{ site.wireguard_mesh_number }} dev mesh{{ item.name }}{{ site.wireguard_mesh_number }}
+ip link set up dev mesh{{ item.name }}{{ site.wireguard_mesh_number }}
+batctl -m bat{{ item.name }} if add mesh{{ item.name }}{{ site.wireguard_mesh_number }}
+{% endfor %}
+{% endfor %}
+batctl -m bat{{ item.name }} gw server 1000000/1000000
+batctl -m bat{{ item.name }} it 10000
+batctl -m bat{{ item.name }} mm 1
+echo 64 > /sys/class/net/bat{{ item.name }}/mesh/hop_penalty
+ifup bat{{ item.name }}
+systemctl restart isc-dhcp-server.service
+systemctl restart bind9.service

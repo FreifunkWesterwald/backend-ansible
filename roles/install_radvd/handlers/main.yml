@@ -1,0 +1,5 @@
+---
+- name: restart radvd
+  systemd:
+      name: radvd.service
+      state: restarted

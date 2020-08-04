@@ -1,0 +1,18 @@
+[Unit]
+Description=WireGuard Backbone for %I
+After=network-online.target
+Wants=network-online.target
+Documentation=man:wg(8)
+Documentation=https://www.wireguard.io/
+Documentation=https://www.wireguard.io/quickstart/
+Documentation=https://git.zx2c4.com/WireGuard/about/src/tools/wg-quick.8
+Documentation=https://git.zx2c4.com/WireGuard/about/src/tools/wg.8
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/etc/wireguard/upbb%i.sh
+ExecStop=/etc/wireguard/downbb%i.sh
+
+[Install]
+WantedBy=multi-user.target

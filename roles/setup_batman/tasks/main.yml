@@ -1,0 +1,20 @@
+---
+- name: load batman-adv kernel module at boot
+  copy:
+      src: modules-load.d_batman.conf
+      dest: /etc/modules-load.d/batman.conf
+
+- name: load batman-adv kernel module
+  modprobe:
+      name: batman-adv
+      state: present
+
+- name: install batctl
+  apt:
+      name: batctl
+      update_cache: yes
+- name: add batman netctl config for sites
+  template:
+      src: 60-batman.j2
+      dest: "/etc/network/interfaces.d/60-{{ item.name }}.cfg"
+  with_items: "{{ sites }}"

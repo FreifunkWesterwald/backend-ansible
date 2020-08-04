@@ -1,0 +1,10 @@
+---
+- name: install ntp
+  apt:
+    name: ntp
+    update_cache: yes
+- name: enable ntp at boot and start it
+  systemd:
+      name: ntp.service
+      enabled: yes
+      state: started

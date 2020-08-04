@@ -1,0 +1,49 @@
+---
+- name: setup fastds
+  hosts: fastd
+  user: root
+  roles:
+      - configure_journald
+      - configure_sysctl
+      - configure_iptables
+      - configure_static_routes
+      #- install_ssmtp
+      #- install_cronie
+      #- install_php
+      #- install_nginx
+      - install_ntp
+      - install_haveged
+      - setup_batman
+      - install_dhcp
+      - install_radvd
+      - install_bind
+      - install_wireguard
+      #- install_wireguard_mesh
+      - install_wireguard_backbone
+      - install_babeld
+      - install_fastd
+      - install_mesh-announce
+      #- install_monitoring
+      #- install_iperf3
+      - update_ssh_keys
+      - install_admin_packages
+      - install_wireguard_mesh
+- name: basic uplink config
+  hosts: uplink
+  user: root
+  roles:
+#      - configure_journald
+#      - configure_sysctl
+#      - configure_iptables
+#      - configure_static_routes
+#      - install_cronie
+      #- install_nginx
+#      - install_ntp
+#      - install_haveged
+#      - install_wireguard
+#      - install_wireguard_backbone
+#      - install_babeld
+#      - install_monitoring
+#      - install_iperf3
+#      - update_ssh_keys
+#      - install_admin_packages

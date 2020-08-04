@@ -1,0 +1,10 @@
+---
+- name: reload iptables
+  systemd:
+      name: iptables.service
+      state: reloaded
+
+- name: reload ip6tables
+  systemd:
+      name: ip6tables.service
+      state: reloaded

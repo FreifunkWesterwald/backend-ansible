@@ -1,0 +1,48 @@
+---
+- name: create ffmyk-influx folder
+  file:
+      path: /opt/ffmyk-influx
+      state: directory
+
+- name: copy ffmyk-influx daemon.sh
+  copy:
+      src: ffmyk-influx/daemon.sh
+      dest: /opt/ffmyk-influx/daemon.sh
+      mode: 0755
+
+- name: copy ffmyk-influx php.ini
+  copy:
+      src: ffmyk-influx/php.ini
+      dest: /opt/ffmyk-influx/php.ini
+
+- name: copy ffmyk-influx systemd service
+  copy:
+      src: ffmyk-influx/ffmyk-influx.service
+      dest: /etc/systemd/system/ffmyk-influx.service
+
+- name: copy ffmyk-influx dhcp.php
+  template:
+      src: ffmyk-influx/dhcp.php.j2
+      dest: /opt/ffmyk-influx/dhcp.php
+
+- name: copy ffmyk-influx fastd.php
+  template:
+      src: ffmyk-influx/fastd.php.j2
+      dest: /opt/ffmyk-influx/fastd.php
+
+- name: copy ffmyk-influx func.php
+  template:
+      src: ffmyk-influx/func.php.j2
+      dest: /opt/ffmyk-influx/func.php
+
+- name: copy ffmyk-influx traffic.php
+  template:
+      src: ffmyk-influx/traffic.php.j2
+      dest: /opt/ffmyk-influx/traffic.php
+
+- name: start and enable ffmyk-influx.service
+  systemd:
+      name: ffmyk-influx.service
+      enabled: yes
+      state: started
+

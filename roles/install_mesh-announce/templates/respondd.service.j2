@@ -1,0 +1,12 @@
+[Unit]
+Description=Respondd
+After=network.target
+
+[Service]
+ExecStart=/opt/mesh-announce/respondd.py -d /opt/mesh-announce/providers {% for site in sites %}-i bat{{ site.name }} -i vpn{{ site.name }} -b bat{{ site.name }} {% endfor %}
+
+Restart=always
+Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+[Install]
+WantedBy=multi-user.target

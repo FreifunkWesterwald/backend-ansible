@@ -1,0 +1,216 @@
+---
+- name: install munin
+  pacman:
+      name: munin-node
+      state: present
+
+- name: copy munin-node config
+  template:
+      src: munin-node.conf.j2
+      dest: /etc/munin/munin-node.conf
+  notify: restart munin-node
+
+- name: install perl-json
+  pacman:
+      name: perl-json
+      state: present
+  when: "'fastd' in group_names"
+
+- name: copy fastd peers plugin
+  copy:
+      src: munin/munin_fastd_peers
+      dest: /usr/lib/munin/plugins/fastd_peers_
+      mode: 0755
+  notify: restart munin-node
+  when: "'fastd' in group_names"
+
+- name: copy fastd traffic plugin
+  copy:
+      src: munin/munin_fastd_traffic
+      dest: /usr/lib/munin/plugins/fastd_traffic_
+      mode: 0755
+  notify: restart munin-node
+  when: "'fastd' in group_names"
+
+- name: enable munin plugins for fastd peers
+  file:
+      path: /etc/munin/plugins/fastd_peers_ff{{ item.name }}
+      src: /usr/lib/munin/plugins/fastd_peers_
+      state: link
+  with_items: "{{ sites }}"
+  notify: restart munin-node
+  when: "'fastd' in group_names"
+
+- name: enable munin plugins for fastd traffic
+  file:
+      path: /etc/munin/plugins/fastd_traffic_ff{{ item.name }}
+      src: /usr/lib/munin/plugins/fastd_traffic_
+      state: link
+  with_items: "{{ sites }}"
+  notify: restart munin-node
+  when: "'fastd' in group_names"
+
+- name: copy fastd plugin config
+  template:
+      src: munin_fastd_conf.j2
+      dest: /etc/munin/plugin-conf.d/fastd
+  notify: restart munin-node
+  when: "'fastd' in group_names"
+
+- name: copy dhcp-pool plugin
+  copy:
+      src: munin/munin_dhcp_pool_plugin
+      dest: /usr/lib/munin/plugins/dhcp-pool
+      mode: 0755
+  notify: restart munin-node
+  when: "'fastd' in group_names"
+
+- name: enable munin plugins for dhcp
+  file:
+      path: /etc/munin/plugins/dhcp-pool
+      src: /usr/lib/munin/plugins/dhcp-pool
+      state: link
+  notify: restart munin-node
+  when: "'fastd' in group_names"
+
+- name: copy fw_conntrack plugin
+  copy:
+      src: munin/munin_fw_conntrack
+      dest: /etc/munin/plugins/fw_conntrack
+      mode: 0755
+  notify: restart munin-node
+
+- name: copy global config
+  copy:
+      src: munin/munin_global_conf
+      dest: /etc/munin/plugin-conf.d/global
+  notify: restart munin-node
+
+- name: install netstat
+  pacman:
+      name: net-tools
+      state: present
+
+- name: install perl-lwp-protocol-https
+  pacman:
+      name: perl-lwp-protocol-https
+      state: present
+
+- name: enable munin plugins for network monitoring (1/9)
+  file:
+      path: /etc/munin/plugins/if_{{ ansible_default_ipv4.interface }}
+      src: /usr/lib/munin/plugins/if_
+      state: link
+  notify: restart munin-node
+
+- name: enable munin plugins for network monitoring (2/9)
+  file:
+      path: /etc/munin/plugins/if_{{ ansible_default_ipv6.interface }}
+      src: /usr/lib/munin/plugins/if_
+      state: link
+  notify: restart munin-node
+
+- name: enable munin plugins for network monitoring (3/9)
+  file:
+      path: /etc/munin/plugins/if_{{ item[0] }}{{ item[1].name }}
+      src: /usr/lib/munin/plugins/if_
+      state: link
+  notify: restart munin-node
+  with_nested:
+      - [ 'bat', 'vpn', 'wg' ]
+      - "{{ sites }}"
+  when: "'fastd' in group_names"
+
+- name: enable munin plugins for network monitoring (4/9)
+  file:
+      path: /etc/munin/plugins/if_bb{{ hostvars[item]['wireguard_bb_name'] }}
+      src: /usr/lib/munin/plugins/if_
+      state: link
+  notify: restart munin-node
+  with_items: "{{ groups['uplink'] }}"
+  when: "'fastd' in group_names"
+
+- name: enable munin plugins for network monitoring (5/9)
+  file:
+      path: /etc/munin/plugins/if_bb{{ hostvars[item]['wireguard_bb_name'] }}
+      src: /usr/lib/munin/plugins/if_
+      state: link
+  notify: restart munin-node
+  with_items: "{{ groups['fastd'] }}"
+  when: "'uplink' in group_names"
+
+- name: enable munin plugins for network monitoring (6/9)
+  file:
+      path: /etc/munin/plugins/if_bb{{ item.name }}
+      src: /usr/lib/munin/plugins/if_
+      state: link
+  notify: restart munin-node
+  with_items: "{{ wireguard_bb_peers|default([]) }}"
+  when: "'uplink' in group_names"
+
+- name: enable munin plugins for network monitoring (7/9)
+  file:
+      path: /etc/munin/plugins/if_bb{{ hostvars[item]['wireguard_bb_name'] }}
+      src: /usr/lib/munin/plugins/if_
+      state: link
+  notify: restart munin-node
+  with_items: "{{ groups['uplink'] | difference([inventory_hostname]) }}"
+  when: "'uplink' in group_names"
+
+- name: enable munin plugins for network monitoring (8/9)
+  file:
+      path: /etc/munin/plugins/if_{{ item.name }}
+      src: /usr/lib/munin/plugins/if_
+      state: link
+  notify: restart munin-node
+  with_items: "{{ ffrl_peers }}"
+  when: "'ffrl_uplink' in group_names"
+
+- name: enable munin plugins for network monitoring (9/9)
+  file:
+      path: /etc/munin/plugins/if_mullvad
+      src: /usr/lib/munin/plugins/if_
+      state: link
+  notify: restart munin-node
+  when: "'mullvad_uplink' in group_names"
+
+- name: enable munin plugins
+  file:
+      path: /etc/munin/plugins/{{ item }}
+      src: /usr/lib/munin/plugins/{{ item }}
+      state: link
+  with_items:
+      - cpu
+      - df
+      - df_inode
+      - diskstats
+      - entropy
+      - forks
+      - fw_forwarded_local
+      - fw_packets
+      - interrupts
+      - irqstats
+      - load
+      - memory
+      - netstat
+      - nginx_request
+      - nginx_status
+      - ntp_kernel_err
+      - ntp_kernel_pll_freq
+      - ntp_kernel_pll_off
+      - ntp_offset
+      - open_files
+      - open_inodes
+      - proc_pri
+      - processes
+      - threads
+      - uptime
+      - users
+      - vmstat
+  notify: restart munin-node
+
+- name: start and enable munin-node
+  systemd:
+      name: munin-node.service
+      enabled: yes
+      state: started

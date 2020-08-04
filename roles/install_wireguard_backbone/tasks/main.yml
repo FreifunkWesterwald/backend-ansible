@@ -1,0 +1,11 @@
+---
+- name: create wireguard backbone service template
+  copy:
+      src: wgbackbone@.service
+      dest: /etc/systemd/system/wgbackbone@.service
+
+- include_tasks: fastd_tasks.yml
+  when: "('fastd' in group_names) or ('nat64' in group_names)"
+
+- include_tasks: uplink_tasks.yml
+  when: "'uplink' in group_names"

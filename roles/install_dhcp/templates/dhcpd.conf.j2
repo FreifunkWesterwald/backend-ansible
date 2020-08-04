@@ -1,0 +1,20 @@
+default-lease-time 600;
+max-lease-time 3600;
+
+authoritative;
+
+log-facility local7;
+
+{% for site in sites %}
+subnet {{ site.dhcp_subnet }} netmask {{ site.dhcp_netmask }} {
+	range {{ site.dhcp_start }} {{ site.dhcp_end }};
+
+	option routers {{ site.bat_ipv4_z }};
+	option domain-name-servers {{ site.bat_ipv4_z }};
+}
+{% endfor %}
+
+subnet {{ ansible_default_ipv4['address'] }} netmask 255.255.255.255 {
+}
+
+#include "/etc/dhcpd.hosts.conf";

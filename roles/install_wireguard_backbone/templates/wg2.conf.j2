@@ -1,0 +1,10 @@
+[Interface]
+ListenPort = {{ item.port }}
+PrivateKey = {{ wireguard_bb_priv_key }}
+
+[Peer]
+PublicKey = {{ item.pub_key }}
+AllowedIPs = 0.0.0.0/0,::/0
+PersistentKeepalive = 30
+{% if item.endpoint is defined %}Endpoint = [{{ item.endpoint }}]:{{ wireguard_bb_port }}{% endif %}
+

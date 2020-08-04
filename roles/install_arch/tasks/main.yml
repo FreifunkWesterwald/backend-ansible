@@ -1,0 +1,140 @@
+---
+- name: format disk
+  filesystem:
+      fstype: btrfs
+      dev: /dev/sda
+      force: yes
+
+- name: mount disk
+  mount:
+      path: /mnt
+      src: /dev/sda
+      state: mounted
+      fstype: btrfs
+
+- name: modify pacman mirrorlist
+  copy:
+      src: mirrorlist
+      dest: /etc/pacman.d/mirrorlist
+
+- name: remove archlinux-keyring conflicting files (1/3)
+  file:
+      dest: /usr/share/pacman/keyrings/archlinux-revoked
+      state: absent
+- name: remove archlinux-keyring conflicting files (2/3)
+  file:
+      dest: /usr/share/pacman/keyrings/archlinux-trusted
+      state: absent
+- name: remove archlinux-keyring conflicting files (3/3)
+  file:
+      dest: /usr/share/pacman/keyrings/archlinux.gpg
+      state: absent
+
+- name: update archlinux-keyring
+  pacman:
+      name: archlinux-keyring
+      force: yes
+      state: present
+      update_cache: yes
+
+- name: pacstrap
+  command: /usr/bin/pacstrap /mnt base base-devel openssh python grub
+
+- name: genfstab
+  shell: /usr/bin/genfstab -U -p /mnt > /mnt/etc/fstab
+
+- name: set hostname
+  shell: /bin/echo {{ arch_hostname }} > /mnt/etc/hostname
+
+- name: Locale conf
+  copy:
+      src: locale.conf
+      dest: /mnt/etc/locale.conf
+
+- name: vconsole
+  copy:
+      src: vconsole.conf
+      dest: /mnt/etc/vconsole.conf
+
+- name: localtime
+  file:
+      src: /usr/share/zoneinfo/Europe/Berlin
+      dest: /mnt/etc/localtime
+      state: link
+
+- name: resolv.conf
+  copy:
+      src: resolv.conf
+      dest: /mnt/etc/resolv.conf
+
+- name: locale.gen
+  replace:
+      dest: /mnt/etc/locale.gen
+      regexp: "^#de_DE.UTF-8.*$"
+      replace: "de_DE.UTF-8 UTF-8"
+ 
+- name: locale-gen
+  command: /usr/bin/arch-chroot /mnt locale-gen
+
+- name: "grub: generate config"
+  command: /usr/bin/arch-chroot /mnt /usr/bin/grub-mkconfig -o /boot/grub/grub.cfg
+
+- name: "grub: install grub"
+  command: /usr/bin/arch-chroot /mnt /usr/bin/grub-install /dev/sda
+
+- name: sshd config
+  copy:
+      src: sshd_config
+      dest: /mnt/etc/ssh/sshd_config
+
+- name: add authorized_keys
+  authorized_key:
+      key: '{{ item }}'
+      path: /mnt/root/.ssh/authorized_keys
+      user: root
+  with_items: '{{ authorized_keys }}'
+
+- name: enable sshd
+  command: /usr/bin/arch-chroot /mnt /usr/bin/systemctl enable sshd.service
+
+- name: create network config
+  template:
+      dest: /mnt/etc/netctl/ens3
+      src: ens3.j2
+
+- name: enable network config
+  command: /usr/bin/arch-chroot /mnt /usr/bin/netctl enable ens3
+
+- name: unmount
+  mount:
+      path: /mnt
+      state: unmounted
+
+- name: reboot
+  shell: sleep 5 && reboot &
+  args:
+      executable: /bin/bash
+  async: 10
+  poll: 0
+  
+- name: waiting for server to go down
+  local_action: 
+      module: wait_for
+      host: "{{ inventory_hostname }}"
+      port: 22
+      delay: 1
+      timeout: 60
+      state: stopped
+
+- name: waiting for server to come back
+  local_action: 
+    module: wait_for 
+      host={{ inventory_hostname }} 
+      port=22 
+      delay=1 
+      timeout=60
+
+- name: remove server from local known_hosts file
+  local_action: shell ssh-keygen -R {{ inventory_hostname }}
+  ignore_errors: true
+

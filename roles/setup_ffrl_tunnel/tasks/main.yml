@@ -1,0 +1,36 @@
+---
+- name: create netctl config
+  template:
+      src: netctl
+      dest: /etc/netctl/{{ item.name }}
+  with_items: "{{ ffrl_peers }}"
+  notify: reenable netctl
+
+- name: enable netctl config
+  command: netctl enable {{ item.name }}
+  args:
+      creates: /etc/systemd/system/multi-user.target.wants/netctl@{{ item.name }}.service
+  with_items: "{{ ffrl_peers }}"
+
+- name: start netctl config
+  systemd:
+      name: netctl@{{ item.name }}.service
+      state: started
+  with_items: "{{ ffrl_peers }}"
+
+- name: install bird
+  pacman:
+      name: bird
+      state: present
+
+- name: create bird config
+  template:
+      src: bird.conf
+      dest: /etc/bird.conf
+  notify: reload bird
+
+- name: start and enable bird
+  systemd:
+      name: bird.service
+      state: started
+      enabled: yes
