@@ -1,4 +1,3 @@
----
 - name: load nf_conntrack kernel module at boot
   copy:
       src: modules-load.d_nf_conntrack.conf

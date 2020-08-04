@@ -1,0 +1,57 @@
+# Usage:
+# This represents the complete configuration for all sites/domains.
+# Lists within a site (e.g. site.ww01.net4) represent "per gateway" values.
+# Each gateway has a node-number, which it will use to index into such lists.
+all_sites:
+  ww01:
+    net4:
+      - '10.30.8.0/22'
+      - '10.30.12.0/22'
+    net4_shared: '10.30.8.0/21'
+    net6_shared: 'fdff:6666:7777:100::/64'
+    net6:
+      - '2a03:2260:1016:0801::/64'
+      - '2a03:2260:1016:0802::/64'
+    fastd:
+      mesh_mac:
+        - '02:ff:57:57:00:21'
+        - '02:ff:57:57:00:22'
+      port:
+        - '10001'
+        - '10002'
+      secret:
+        - '***REMOVED***'
+        - '***REMOVED***'
+    bat:
+      ipv4: '10.30.8.1'
+      ipv4_cidr: 21
+      ipv6:
+        - '2a03:2260:1016:0801::1'
+        - '2a03:2260:1016:0802::1'
+      mac:
+        - '02:ff:57:57:ff:01'
+        - '02:ff:57:57:ff:02'
+    dhcp:
+      subnet: '10.30.8.0'
+      netmask: '255.255.248.0'
+      range:
+        - {start: '10.30.8.50', end: '10.30.11.250'}
+        - {start: '10.30.12.50', end: '10.30.15.250'}
+    wireguard_mesh:
+      priv_key:
+        - 'WGbd9/VCQuK3bMJ/MQMYhiOgIqjj69d5lMBIoJmFR3E='
+        - '6NJTgxfj50slhh8BZMuOCHQfuN46UNia4NGsezz/X2o='
+      pub_key:
+        - 'JOjY19USn8eQNefCYAOrdyGM35Fes35EOrDVdoL8sT8='
+        - 'QsUy6Q17FkX1Mu0amRQKY07DYpf+oaH/5gND5sFlc2M='
+      port: 10057
+      address:
+        - 'fdff:5757:bb::1'
+        - 'fdff:5757:bb::2'
+      # will be extended with node_number of the peer in `up.sh`.
+      mac_prefix:
+        - '02:ff:57:57:00:1'
+        - '02:ff:57:57:00:2'
+      endpoint:
+        - '2a01:4f8:c2c:2d23::1'
+        - '2a01:4f8:140:64e1:0:c01d:cafe:2'

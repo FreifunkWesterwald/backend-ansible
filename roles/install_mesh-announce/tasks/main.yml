@@ -1,4 +1,3 @@
----
 - name: install mesh-announce dependencies
   apt:
       name:
@@ -14,7 +13,7 @@
 
 - name: create respondd service
   template:
-      src: respondd.service.j2
+      src: respondd.service
       dest: /etc/systemd/system/respondd.service
       mode: 0644
 

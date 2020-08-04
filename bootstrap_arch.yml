@@ -1,4 +1,3 @@
----
 - name: reboot vserver into rescue image
   hosts: new_fastds
   connection: local

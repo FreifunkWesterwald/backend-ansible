@@ -1,4 +1,3 @@
----
 - name: install munin
   pacman:
       name: munin-node
@@ -6,7 +5,7 @@
 
 - name: copy munin-node config
   template:
-      src: munin-node.conf.j2
+      src: munin-node.conf
       dest: /etc/munin/munin-node.conf
   notify: restart munin-node
 
@@ -52,7 +51,7 @@
 
 - name: copy fastd plugin config
   template:
-      src: munin_fastd_conf.j2
+      src: munin_fastd_conf
       dest: /etc/munin/plugin-conf.d/fastd
   notify: restart munin-node
   when: "'fastd' in group_names"

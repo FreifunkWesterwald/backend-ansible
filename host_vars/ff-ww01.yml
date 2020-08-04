@@ -1,0 +1,13 @@
+ansible_host: 2a01:4f8:c2c:2d23::1
+sites:
+  - name: 'ww01'
+    node_number: 1
+wireguard_bb_name: 'ww01'
+wireguard_bb_endpoint: '{{ ansible_host }}'
+wireguard_bb_priv_key: 'WGbd9/VCQuK3bMJ/MQMYhiOgIqjj69d5lMBIoJmFR3E='
+wireguard_bb_pub_key: 'JOjY19USn8eQNefCYAOrdyGM35Fes35EOrDVdoL8sT8='
+wireguard_bb_ipv4: '10.222.0.25'
+wireguard_bb_ipv6: 'fe80::ffbb:ffbb:25'
+wireguard_bb_port: 10125
+preferred_uplink: 'uplink1'
+

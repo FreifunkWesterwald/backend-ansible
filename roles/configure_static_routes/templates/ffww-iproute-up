@@ -1,0 +1,20 @@
+#!/bin/bash
+ip link set address {{ all_sites[site.name].bat.mac[site.node_number-1] }} dev bat{{ site.name }}
+
+# All traffic coming from the batman interface or any
+# of our freifunk IPs is to be processed via the ffww table
+ip -4 rule add iif bat{{ site.name }} table ffww priority 10
+ip -6 rule add iif bat{{ site.name }} table ffww priority 10
+ip -4 rule add from {{ all_sites[site.name].net4_shared }} table ffww priority 10
+ip -6 rule add from {{ all_sites[site.name].net6[site.node_number-1] }} table ffww priority 10
+
+# All not explicitly routed traffic is to be blocked
+ip -4 rule add from all iif bat{{ site.name }} type unreachable priority 200
+ip -6 rule add from all iif bat{{ site.name }} type unreachable priority 200
+
+# Route all freifunk IPs via the batman interface
+ip -4 route replace {{ all_sites[site.name].net4_shared }} dev bat{{ site.name }} proto static table ffww
+# Also add the more specific route for babel announcements
+ip -4 route replace {{ all_sites[site.name].net4[site.node_number-1] }} dev bat{{ site.name }} proto static table ffww
+ip -6 route replace {{ all_sites[site.name].net6[site.node_number-1] }} dev bat{{ site.name }} proto static table ffww
+ip -6 route replace {{ all_sites[site.name].net6_shared}} dev bat{{ site.name }} proto static table ffww

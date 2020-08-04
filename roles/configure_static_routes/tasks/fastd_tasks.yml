@@ -1,14 +1,17 @@
----
 - name: copy site specific iproute up config script
   template:
-      src: ffww-iproute-up.j2
-      dest: /usr/local/bin/ffww-iproute{{ item.name }}-up.sh
+      src: ffww-iproute-up
+      dest: /usr/local/bin/ffww-iproute{{ site.name }}-up.sh
       mode: 0744
-  with_items: "{{ sites }}"
+  loop: "{{ sites }}"
+  loop_control:
+    loop_var: site
 
 - name: copy site specific iproute down config script
   template:
-      src: ffww-iproute-down.j2
-      dest: /usr/local/bin/ffww-iproute{{ item.name }}-down.sh
+      src: ffww-iproute-down
+      dest: /usr/local/bin/ffww-iproute{{ site.name }}-down.sh
       mode: 0744
-  with_items: "{{ sites }}"
+  loop: "{{ sites }}"
+  loop_control:
+    loop_var: site

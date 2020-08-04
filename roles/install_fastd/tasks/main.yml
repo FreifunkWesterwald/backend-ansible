@@ -1,67 +1,81 @@
----
 - name: install fastd
   apt:
       name: fastd
       update_cache: yes
 - name: create verify.sh
-  file:
-      src: verify.sh.j2
-      path: /etc/fastd/verify.sh
+  copy:
+      src: verify.sh
+      dest: /etc/fastd/verify.sh
       mode: 0744
-  with_items: "{{ sites }}"
 
 - name: create site folder
   file:
-      path: /etc/fastd/ff{{ item.name }}
+      path: /etc/fastd/ff{{ site.name }}
       state: directory
-  with_items: "{{ sites }}"
+  loop: "{{ sites }}"
+  loop_control:
+    loop_var: site
 
 - name: fastd.conf
   template:
-      src: fastd.conf.j2
-      dest: /etc/fastd/ff{{ item.name }}/fastd.conf
+      src: fastd.conf
+      dest: /etc/fastd/ff{{ site.name }}/fastd.conf
       mode: 0640
   #notify: restart fastd{{ item.name }}
-  with_items: "{{ sites }}"
+  loop: "{{ sites }}"
+  loop_control:
+    loop_var: site
 
 - name: add fastd bin folder
   file:
-      path: /etc/fastd/ff{{ item.name }}/bin
+      path: /etc/fastd/ff{{ site.name }}/bin
       state: directory
-  with_items: "{{ sites }}"
+  loop: "{{ sites }}"
+  loop_control:
+    loop_var: site
 
 - name: add fastd up script
   template:
-      src: fastd_up.sh.j2
-      dest: /etc/fastd/ff{{ item.name }}/bin/up.sh
+      src: fastd_up.sh
+      dest: /etc/fastd/ff{{ site.name }}/bin/up.sh
       mode: 0744
   #notify: restart fastd{{ item.name }}
-  with_items: "{{ sites }}"
+  loop: "{{ sites }}"
+  loop_control:
+    loop_var: site
 
 - name: add fastd peers folder
   file:
-      path: /etc/fastd/ff{{ item.name }}/peers
+      path: /etc/fastd/ff{{ site.name }}/peers
       state: directory
-  with_items: "{{ sites }}"
+  loop: "{{ sites }}"
+  loop_control:
+    loop_var: site
 
 - name: add fastd peer api script
   template:
-      src: fastd-api.php.j2
-      dest: /etc/fastd/ff{{ item.name }}/bin/fastd-api.php
-  with_items: "{{ sites }}"
+      src: fastd-api.php
+      dest: /etc/fastd/ff{{ site.name }}/bin/fastd-api.php
+  loop: "{{ sites }}"
+  loop_control:
+    loop_var: site
 
 - name: setup cronjob for fastd-api
   cron:
-      name: fastd-api-{{ item.name }}
+      name: fastd-api-{{ site.name }}
       minute: '*/10'
       user: root
       cron_file: fastd-api
-      job: '/usr/bin/php /etc/fastd/ff{{ item.name }}/bin/fastd-api.php'
-  with_items: "{{ sites }}"
+      job: '/usr/bin/php /etc/fastd/ff{{ site.name }}/bin/fastd-api.php'
+  loop: "{{ sites }}"
+  loop_control:
+    loop_var: site
 
 - name: start and enable fastd service
   systemd:
-      name: fastd@ff{{ item.name }}.service
+      name: fastd@ff{{ site.name }}.service
       enabled: yes
       state: started
-  with_items: "{{ sites }}"
+  loop: "{{ sites }}"
+  loop_control:
+    loop_var: site

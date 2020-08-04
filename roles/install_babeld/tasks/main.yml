@@ -1,11 +1,10 @@
----
 - name: install fastd
   apt:
       name: babeld
       update_cache: yes
 - name: babeld.conf
   template:
-      src: babeld.conf.j2
+      src: babeld.conf
       dest: /etc/babeld.conf
       mode: 0640
   notify: restart babeld

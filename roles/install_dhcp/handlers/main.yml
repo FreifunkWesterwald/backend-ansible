@@ -1,4 +1,3 @@
----
 - name: restart dhcpd4
   systemd:
       name: dhcpd4.service

@@ -1,4 +1,3 @@
----
 - name: reload iptables
   systemd:
       name: iptables.service

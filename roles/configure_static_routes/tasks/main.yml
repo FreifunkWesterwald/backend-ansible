@@ -1,4 +1,3 @@
----
 - name: name ffww routing table
   lineinfile:
       path: /etc/iproute2/rt_tables

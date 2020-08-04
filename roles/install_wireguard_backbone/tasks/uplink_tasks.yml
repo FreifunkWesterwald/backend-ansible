@@ -1,84 +1,83 @@
----
 - name: create wireguard config for fastds
   template:
-      src: wg.conf.j2
+      src: wg.conf
       dest: /etc/wireguard/wgbb{{ hostvars[item]['wireguard_bb_name'] }}.conf
       mode: 0400
   with_items: "{{ groups['fastd'] }}"
 
 - name: create wireguard config for nat64
   template:
-      src: wg.conf.j2
+      src: wg.conf
       dest: /etc/wireguard/wgbb{{ hostvars[item]['wireguard_bb_name'] }}.conf
       mode: 0400
   with_items: "{{ groups['nat64'] }}"
 
 - name: create wireguard config for uplinks
   template:
-      src: wg.conf.j2
+      src: wg.conf
       dest: /etc/wireguard/wgbb{{ hostvars[item]['wireguard_bb_name'] }}.conf
       mode: 0400
   with_items: "{{ groups['uplink'] | difference([inventory_hostname]) }}"
 
 - name: create wireguard config for additional peers
   template:
-      src: wg2.conf.j2
+      src: wg2.conf
       dest: /etc/wireguard/wgbb{{ item.name }}.conf
       mode: 0400
   with_items: "{{ wireguard_bb_peers|default([]) }}"
 
 - name: create wireguard up scripts for fastds
   template:
-      src: up.sh.j2
+      src: up.sh
       dest: /etc/wireguard/upbb{{ hostvars[item]['wireguard_bb_name'] }}.sh
       mode: 0744
   with_items: "{{ groups['fastd'] }}"
 
 - name: create wireguard up scripts for nat64
   template:
-      src: up.sh.j2
+      src: up.sh
       dest: /etc/wireguard/upbb{{ hostvars[item]['wireguard_bb_name'] }}.sh
       mode: 0744
   with_items: "{{ groups['nat64'] }}"
 
 - name: create wireguard up scripts for uplinks
   template:
-      src: up.sh.j2
+      src: up.sh
       dest: /etc/wireguard/upbb{{ hostvars[item]['wireguard_bb_name'] }}.sh
       mode: 0744
   with_items: "{{ groups['uplink'] | difference([inventory_hostname]) }}"
 
 - name: create wireguard up scripts for additional peers
   template:
-      src: up2.sh.j2
+      src: up2.sh
       dest: /etc/wireguard/upbb{{ item.name }}.sh
       mode: 0744
   with_items: "{{ wireguard_bb_peers|default([]) }}"
 
 - name: create wireguard down scripts for fastds
   template:
-      src: down.sh.j2
+      src: down.sh
       dest: /etc/wireguard/downbb{{ hostvars[item]['wireguard_bb_name'] }}.sh
       mode: 0744
   with_items: "{{ groups['fastd'] }}"
 
 - name: create wireguard down scripts for nat64
   template:
-      src: down.sh.j2
+      src: down.sh
       dest: /etc/wireguard/downbb{{ hostvars[item]['wireguard_bb_name'] }}.sh
       mode: 0744
   with_items: "{{ groups['nat64'] }}"
 
 - name: create wireguard down scripts for uplinks
   template:
-      src: down.sh.j2
+      src: down.sh
       dest: /etc/wireguard/downbb{{ hostvars[item]['wireguard_bb_name'] }}.sh
       mode: 0744
   with_items: "{{ groups['uplink'] | difference([inventory_hostname]) }}"
 
 - name: create wireguard down scripts for additional peers
   template:
-      src: down2.sh.j2
+      src: down2.sh
       dest: /etc/wireguard/downbb{{ item.name }}.sh
       mode: 0744
   with_items: "{{ wireguard_bb_peers|default([]) }}"

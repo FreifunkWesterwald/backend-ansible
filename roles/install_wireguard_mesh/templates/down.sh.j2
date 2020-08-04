@@ -1,8 +1,0 @@
-#!/bin/bash
-{% for host in groups['fastd'] %}
-{% for site in hostvars[host]['sites'] if site.name == item.name and site.wireguard_mesh_number != item.wireguard_mesh_number %}
-batctl -m bat{{ item.name }} if del mesh{{ item.name }}{{ site.wireguard_mesh_number }}
-ip link set down dev mesh{{ item.name }}{{ site.wireguard_mesh_number }}
-ip link del mesh{{ item.name }}{{ site.wireguard_mesh_number }} type ip6gretap
-{% endfor %}
-{% endfor %}

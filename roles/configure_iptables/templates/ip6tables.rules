@@ -58,8 +58,8 @@ COMMIT
 -A INPUT -i bat+ -p udp -m udp --dport 1001 -j ACCEPT
 # wireguard_mesh
 {% for site in sites %}
--A INPUT -p udp -m udp --dport {{ site.wireguard_mesh_port }} -j ACCEPT
--A INPUT -s {{ site.wireguard_mesh_address }}/48 -p gre -j ACCEPT
+-A INPUT -p udp -m udp --dport {{ all_sites[site.name].wireguard_mesh.port }} -j ACCEPT
+-A INPUT -s {{ all_sites[site.name].wireguard_mesh.address[site.node_number-1] }}/48 -p gre -j ACCEPT
 {% endfor %}
 {% endif %}
 # wireguard_backbone

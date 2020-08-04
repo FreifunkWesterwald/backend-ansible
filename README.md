@@ -1,5 +1,5 @@
-# ffmyk-ansible
-sets up ffmyk supernodes
+# ffww-ansible
+sets up ffww supernodes
 
 ## usage
 - to install arch on hetzner vms run the bootstrap_arch playbook

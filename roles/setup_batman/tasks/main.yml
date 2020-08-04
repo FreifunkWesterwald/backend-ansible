@@ -1,4 +1,3 @@
----
 - name: load batman-adv kernel module at boot
   copy:
       src: modules-load.d_batman.conf
@@ -15,6 +14,8 @@
       update_cache: yes
 - name: add batman netctl config for sites
   template:
-      src: 60-batman.j2
-      dest: "/etc/network/interfaces.d/60-{{ item.name }}.cfg"
-  with_items: "{{ sites }}"
+      src: 60-batman
+      dest: "/etc/network/interfaces.d/60-{{ site.name }}.cfg"
+  loop: "{{ sites }}"
+  loop_control:
+    loop_var: site

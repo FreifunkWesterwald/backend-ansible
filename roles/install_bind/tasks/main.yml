@@ -1,4 +1,3 @@
----
 - name: install bind
   apt:
       name: bind9
@@ -13,6 +12,6 @@
 
 - name: bind config
   template:
-      src: named.conf.j2
+      src: named.conf
       dest: /etc/bind/named.conf
  # notify: reload bind9

@@ -1,4 +1,3 @@
----
 - name: create ffmyk-influx folder
   file:
       path: /opt/ffmyk-influx
@@ -22,22 +21,22 @@
 
 - name: copy ffmyk-influx dhcp.php
   template:
-      src: ffmyk-influx/dhcp.php.j2
+      src: ffmyk-influx/dhcp.php
       dest: /opt/ffmyk-influx/dhcp.php
 
 - name: copy ffmyk-influx fastd.php
   template:
-      src: ffmyk-influx/fastd.php.j2
+      src: ffmyk-influx/fastd.php
       dest: /opt/ffmyk-influx/fastd.php
 
 - name: copy ffmyk-influx func.php
   template:
-      src: ffmyk-influx/func.php.j2
+      src: ffmyk-influx/func.php
       dest: /opt/ffmyk-influx/func.php
 
 - name: copy ffmyk-influx traffic.php
   template:
-      src: ffmyk-influx/traffic.php.j2
+      src: ffmyk-influx/traffic.php
       dest: /opt/ffmyk-influx/traffic.php
 
 - name: start and enable ffmyk-influx.service

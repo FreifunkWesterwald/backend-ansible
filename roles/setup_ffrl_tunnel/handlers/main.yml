@@ -1,4 +1,3 @@
----
 - name: reenable netctl
   command: netctl reenable {{ item.name }}
   with_items: "{{ ffrl_peers }}"

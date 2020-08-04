@@ -1,0 +1,15 @@
+#!/bin/bash
+
+ip -4 rule delete iif bat{{ site.name }} table ffww
+ip -6 rule delete iif bat{{ site.name }} table ffww
+ip -4 rule delete from {{ all_sites[site.name].net4[site.node_number-1] }} table ffww
+ip -4 rule delete from {{ all_sites[site.name].net4_shared }} table ffww
+ip -6 rule delete from {{ all_sites[site.name].net6[site.node_number-1] }} table ffww
+
+ip -4 rule delete from all iif bat{{ site.name }} type unreachable priority 200
+ip -6 rule delete from all iif bat{{ site.name }} type unreachable priority 200
+
+ip -4 route delete {{ all_sites[site.name].net4_shared }} dev bat{{ site.name }} proto static table ffww
+ip -4 route delete {{ all_sites[site.name].net4[site.node_number-1] }} dev bat{{ site.name }} proto static table ffww
+ip -6 route delete {{ all_sites[site.name].net6[site.node_number-1] }} dev bat{{ site.name }} proto static table ffww
+ip -6 route delete {{ all_sites[site.name].net6_shared}} dev bat{{ site.name }} proto static table ffww

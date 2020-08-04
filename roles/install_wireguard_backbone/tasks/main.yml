@@ -1,4 +1,3 @@
----
 - name: create wireguard backbone service template
   copy:
       src: wgbackbone@.service

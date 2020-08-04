@@ -1,0 +1,8 @@
+Connection=ethernet
+Interface=bat{{ site.name }}
+IP=static
+IP6=static
+Address6=({{ all_sites[site.name].bat.ipv6[site.node_number-1] }}/64)
+Address=({{ all_sites[site.name].bat.ipv4}}/{{ all_sites[site.name].bat.ipv4_cidr}})
+ExecUpPost=/usr/local/bin/ffmyk-iproute{{ site.name }}-up.sh
+ExecDownPre=/usr/local/bin/ffmyk-iproute{{ site.name }}-down.sh

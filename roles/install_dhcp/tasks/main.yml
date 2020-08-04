@@ -1,30 +1,22 @@
----
 - name: install dhcp
   apt:
       name: isc-dhcp-server 
       update_cache: yes
-#- name: create dhcp file for static ips
-#  copy:
-#      content: ''
-#      dest: /etc/dhcpd.hosts{{ item.name }}.conf
-#      force: no
-#  with_items: "{{ sites }}"
-#
-#- name: copy fastd-services-api.php
-#  copy:
-#      src: fastd-services-api.php
-#      dest: /etc/fastd-services-api.php
-#
-#- name: setup cronjob for fastd-services-api
-#  cron:
-#      name: fastd-services-api
-#      minute: '*/10'
-#      user: root
-#      cron_file: fastd-api
-#      job: '/usr/bin/php /etc/fastd-services-api.php'
+# fastd's up.sh will start dhcpd anyways
+# also this still uses init.d and breaks,
+# when autostart is enabled
+- name: disable dhcpd autostart
+  systemd:
+      name: isc-dhcp-server
+      enabled: no
 
 - name: dhcpd.conf
   template:
-      src: dhcpd.conf.j2
+      src: dhcpd.conf
       dest: /etc/dhcp/dhcpd.conf
+- name: isc-dhcpd-server
+  lineinfile:
+    path: /etc/default/isc-dhcp-server
+    regexp: "^#?INTERFACESv4="
+    line: INTERFACESv4="bat{% for site in sites %}{{ site.name }} {% endfor %}"
 #  notify: restart dhcpd4
