@@ -1,7 +1,6 @@
 - name: install bind
   apt:
       name: bind9
-      update_cache: yes
 
 - name: create named zone backup folder
   file:

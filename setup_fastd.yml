@@ -3,6 +3,7 @@
   user: root
   roles:
       - update_ssh_keys
+      - upgrade_server
       - configure_journald
       - configure_sysctl
       - configure_iptables

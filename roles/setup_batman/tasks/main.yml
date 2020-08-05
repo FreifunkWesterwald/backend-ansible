@@ -1,21 +1,77 @@
+- name: Get architecture
+  command: "dpkg --print-architecture"
+  register: dpkg_arch
+  changed_when: False
+- set_fact:
+    kernel_header_version: "{{ ('-cloud-' in ansible_kernel) | ternary(ansible_kernel,dpkg_arch.stdout) }}"
+- name: install build dependencies for batman-adv kernel module
+  apt:
+    name:
+      - "linux-headers-{{ kernel_header_version }}"
+      - "build-essential"
+      - "dkms"
+    state: present
+- name: download and unpack batman-adv build files
+  unarchive:
+    remote_src: yes
+    src: "https://downloads.open-mesh.org/batman/releases/batman-adv-{{ batman_version }}/batman-adv-{{ batman_version }}.tar.gz"
+    creates: "/usr/src/batman-adv-{{ batman_version }}/"
+    dest: /usr/src/
+    validate_certs: no
+- name: add batman-adv dkms config
+  template:
+    src: batman-adv.dkms.conf
+    dest: "/usr/src/batman-adv-{{ batman_version }}/dkms.conf"
+- name: add batman-adv dkms support
+  command: dkms add -m batman-adv -v {{ batman_version }}
+  register: ret
+  failed_when: ret.rc != 0 and ret.rc != 3
+  changed_when: ret.rc == 0
+- name: build batman-adv dkms
+  command: dkms build -m batman-adv -v {{ batman_version }}
+  when: ret.rc == 0
+- name: install batman-adv dkms
+  command: dkms install -m batman-adv -v {{batman_version }}
+  when: ret.rc == 0
+
 - name: load batman-adv kernel module at boot
   copy:
-      src: modules-load.d_batman.conf
-      dest: /etc/modules-load.d/batman.conf
-
+    src: modules-load.d_batman.conf
+    dest: /etc/modules-load.d/batman.conf
 - name: load batman-adv kernel module
   modprobe:
-      name: batman-adv
-      state: present
+    name: batman-adv
+    state: present
 
-- name: install batctl
+- name: install build dependencies for batctl
   apt:
-      name: batctl
-      update_cache: yes
+    name:
+      - "pkg-config"
+      - "libnl-3-200"
+      - "libnl-3-dev"
+      - "libnl-genl-3-dev"
+    state: present
+- name: download and unpack batctl build files
+  unarchive:
+    remote_src: yes
+    src: "https://downloads.open-mesh.org/batman/releases/batman-adv-{{ batman_version }}/batctl-{{ batman_version }}.tar.gz"
+    creates: "/usr/local/src/batctl-{{ batman_version }}/"
+    dest: /usr/local/src/
+    validate_certs: no
+- name: make batctl
+  make:
+    chdir: "/usr/local/src/batctl-{{ batman_version }}/"
+  register: batctl_make
+- name: make install batctl
+  make:
+    chdir: "/usr/local/src/batctl-{{ batman_version }}/"
+    target: install
+  when: batctl_make.changed
+
 - name: add batman netctl config for sites
   template:
-      src: 60-batman
-      dest: "/etc/network/interfaces.d/60-{{ site.name }}.cfg"
+    src: 60-batman
+    dest: "/etc/network/interfaces.d/60-{{ site.name }}.cfg"
   loop: "{{ sites }}"
   loop_control:
     loop_var: site

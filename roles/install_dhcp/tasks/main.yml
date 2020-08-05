@@ -1,7 +1,6 @@
 - name: install dhcp
   apt:
       name: isc-dhcp-server 
-      update_cache: yes
 # fastd's up.sh will start dhcpd anyways
 # also this still uses init.d and breaks,
 # when autostart is enabled

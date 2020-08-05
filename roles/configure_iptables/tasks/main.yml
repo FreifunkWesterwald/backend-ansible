@@ -1,28 +1,13 @@
 - name: install iptables-persistent
   apt:
       name: iptables-persistent
-      update_cache: yes
 
 - name: copy iptables.rules
   template:
       src: iptables.rules
       dest: /etc/iptables/rules.v4
-#  notify: reload iptables
-
-#- name: start and enable iptables service
-#  systemd:
-#      name: iptables.service
-#      enabled: yes
-#      state: started
 
 - name: copy ip6tables.rules
   template:
       src: ip6tables.rules
       dest: /etc/iptables/rules.v6
-#  notify: reload ip6tables
-
-#- name: start and enable ip6tables service
-#  systemd:
-#      name: ip6tables.service
-#      enabled: yes
-#      state: started

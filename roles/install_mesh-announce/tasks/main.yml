@@ -4,8 +4,6 @@
           - git
           - lsb-release
           - ethtool
-      update_cache: yes
-
 - name: clone mesh-announce repo
   git:
       repo: https://github.com/FreifunkMYK/mesh-announce.git

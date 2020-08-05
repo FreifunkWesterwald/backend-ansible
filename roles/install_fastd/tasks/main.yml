@@ -1,7 +1,6 @@
 - name: install fastd
   apt:
       name: fastd
-      update_cache: yes
 - name: create verify.sh
   copy:
       src: verify.sh

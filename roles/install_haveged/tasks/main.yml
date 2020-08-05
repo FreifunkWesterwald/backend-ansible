@@ -1,7 +1,6 @@
 - name: install haveged
   apt:
     name: haveged
-    update_cache: yes
 - name: enable haveged at boot and start it
   systemd:
       name: haveged.service

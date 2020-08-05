@@ -1,34 +1,20 @@
-- name: (Debian) Add WireGuard repository on buster or earlier
+- name: Add WireGuard repository on buster or earlier
   apt_repository:
     repo: "deb http://deb.debian.org/debian buster-backports main"
     state: present
     update_cache: yes
-- name: Upgrade all apt packages
-  apt: upgrade=dist force_apt_get=yes
-- name: Check if a reboot is needed for Debian and Ubuntu boxes
-  register: reboot_required_file
-  stat: path=/var/run/reboot-required get_md5=no
-- name: Reboot the Debian or Ubuntu server
-  reboot:
-    msg: "Reboot initiated by Ansible due to kernel updates"
-    connect_timeout: 5
-    reboot_timeout: 300
-    pre_reboot_delay: 0
-    post_reboot_delay: 30
-    test_command: uptime
-  when: reboot_required_file.stat.exists
-- name: (Debian) Get architecture
+- name: Get architecture
   command: "dpkg --print-architecture"
   register: dpkg_arch
   changed_when: False
 - set_fact:
     kernel_header_version: "{{ ('-cloud-' in ansible_kernel) | ternary(ansible_kernel,dpkg_arch.stdout) }}"
-- name: (Debian) Install kernel headers to compile Wireguard with DKMS
+- name: Install kernel headers to compile Wireguard with DKMS
   apt:
     name:
       - "linux-headers-{{ kernel_header_version }}"
     state: present
 - name: install wireguard
   apt:
-      name: ['wireguard']
-      update_cache: yes
+    name:
+      - 'wireguard'

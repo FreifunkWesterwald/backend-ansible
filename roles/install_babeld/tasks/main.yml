@@ -1,7 +1,6 @@
 - name: install fastd
   apt:
       name: babeld
-      update_cache: yes
 - name: babeld.conf
   template:
       src: babeld.conf

@@ -1,7 +1,6 @@
 - name: install radvd
   apt:
       name: radvd
-      update_cache: yes
 - name: radvd config
   template:
       src: radvd.conf
