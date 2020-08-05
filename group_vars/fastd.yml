@@ -2,6 +2,11 @@
 # This represents the complete configuration for all sites/domains.
 # Lists within a site (e.g. site.ww01.net4) represent "per gateway" values.
 # Each gateway has a node-number, which it will use to index into such lists.
+#
+# Please be cautious with MAC addresses:
+# Prefix '02:ff:57:57:00:xx' is used for fastd links
+# Prefix '02:ff:57:57:ff:xx' is used for batman interfaces
+# Prefix '02:ff:57:57:ee:xx' is used for inter-gateway wireguard meshes
 all_sites:
   ww01:
     net4:
@@ -82,8 +87,8 @@ all_sites:
         - 'fdff:5757:bb::2'
       # will be extended with node_number of the peer in `up.sh`.
       mac_prefix:
-        - '02:ff:57:57:00:1'
-        - '02:ff:57:57:00:2'
+        - '02:ff:57:57:ee:1'
+        - '02:ff:57:57:ee:2'
       endpoint:
         - '2a01:4f8:c2c:2d23::1'
         - '2a01:4f8:140:64e1:0:c01d:cafe:2'
