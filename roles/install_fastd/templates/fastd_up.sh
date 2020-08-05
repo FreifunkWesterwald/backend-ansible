@@ -10,4 +10,4 @@ echo 64 > /sys/class/net/bat{{ site.name }}/mesh/hop_penalty
 #ifdown bat{{ site.name }}
 ifup bat{{ site.name }}
 systemctl restart isc-dhcp-server.service
-systemctl restart bind9.service5
+systemctl restart bind9.service
