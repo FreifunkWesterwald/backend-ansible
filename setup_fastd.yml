@@ -10,7 +10,8 @@
       - configure_static_routes
       - install_ntp
       - install_haveged
-      - setup_batman
+      - install_batman
+      - configure_batman_gw
       - install_dhcp
       - install_radvd
       - install_bind
@@ -19,6 +20,7 @@
       - install_wireguard_backbone
       - install_babeld
       - install_fastd
+      - configure_fastd_gw
       - install_mesh-announce
       #- install_monitoring
       #- install_iperf3

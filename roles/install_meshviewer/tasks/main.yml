@@ -1,0 +1,57 @@
+- name: install meshviewer build dependecies
+  apt:
+    name:
+      - "yarnpkg"
+      - "nginx"
+- name: clone meshviewer
+  git:
+    repo: https://github.com/ffrgb/meshviewer.git
+    dest: /opt/meshviewer/
+    force: yes
+- name: install yarn packages based on package.json
+  yarn:
+    executable: /usr/bin/yarnpkg
+    path: /opt/meshviewer/
+- name: load batman-adv kernel module at boot
+  copy:
+    src: meshviewer.conf.js
+    dest: /opt/meshviewer/config.js
+- name: build meshviewer
+  shell:
+    cmd: yarnpkg gulp
+    chdir: /opt/meshviewer
+- name: copy meshviewer page content
+  copy:
+    remote_src: yes
+    src: /opt/meshviewer/build/
+    dest: /var/www/html/
+    mode: preserve
+
+# install tile cache
+- name: create tile cache dir
+  file:
+    path: /var/cache/nginx
+    state: directory
+    owner: www-data
+    group: www-data
+- name: disable default nginx config
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  register: nginx_default_disabled
+- name: copy nginx config
+  copy:
+    src: nginx_ffwwmap
+    dest: /etc/nginx/sites-available/ffwwmap
+  register: nginx_config_copy
+- name: enable nginx tile chache config
+  file:
+    path: /etc/nginx/sites-enabled/ffwwmap
+    state: link
+    src: /etc/nginx/sites-available/ffwwmap
+  register: nginx_config_enable
+- name: restart nginx
+  systemd:
+    name: nginx.service
+    state: restarted
+  when: nginx_config_enable.changed or nginx_config_copy.changed or nginx_default_disabled.changed

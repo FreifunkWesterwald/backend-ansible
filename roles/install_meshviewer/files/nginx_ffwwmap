@@ -1,0 +1,33 @@
+proxy_cache_path /var/cache/nginx levels=1:2 keys_zone=osm_cache:10m max_size=2g inactive=1d use_temp_path=off;
+
+server {
+  listen 80;
+  listen [::]:80;
+
+  server_name map.freifunk-westerwald.de;
+
+  root /var/www/html;
+
+  location /osm {
+    proxy_cache osm_cache;
+    proxy_cache_revalidate on;
+    proxy_cache_use_stale error timeout updating http_500 http_502 http_503 http_504;
+    proxy_cache_background_update on;
+    proxy_next_upstream error http_404;
+    proxy_cache_lock on;
+    add_header X-Cache-Status $upstream_cache_status;
+    proxy_pass https://osm/;
+  }
+
+  location / {
+    # First attempt to serve request as file, then
+    # as directory, then fall back to displaying a 404.
+    try_files $uri $uri/ =404;
+  }
+}
+
+upstream osm {
+  server a.tile.openstreetmap.de:443;
+  server b.tile.openstreetmap.de:443;
+  server c.tile.openstreetmap.de:443;
+}

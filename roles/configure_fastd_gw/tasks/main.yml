@@ -1,0 +1,58 @@
+- name: create verify.sh
+  copy:
+      src: verify.sh
+      dest: /etc/fastd/verify.sh
+      mode: 0744
+
+- name: create site folder
+  file:
+      path: /etc/fastd/ff{{ site.name }}
+      state: directory
+  loop: "{{ sites }}"
+  loop_control:
+    loop_var: site
+
+- name: fastd.conf
+  template:
+      src: fastd.conf
+      dest: /etc/fastd/ff{{ site.name }}/fastd.conf
+      mode: 0640
+  #notify: restart fastd{{ item.name }}
+  loop: "{{ sites }}"
+  loop_control:
+    loop_var: site
+
+- name: add fastd bin folder
+  file:
+      path: /etc/fastd/ff{{ site.name }}/bin
+      state: directory
+  loop: "{{ sites }}"
+  loop_control:
+    loop_var: site
+
+- name: add fastd up script
+  template:
+      src: fastd_up.sh
+      dest: /etc/fastd/ff{{ site.name }}/bin/up.sh
+      mode: 0744
+  #notify: restart fastd{{ item.name }}
+  loop: "{{ sites }}"
+  loop_control:
+    loop_var: site
+
+- name: add fastd peers folder
+  file:
+      path: /etc/fastd/ff{{ site.name }}/peers
+      state: directory
+  loop: "{{ sites }}"
+  loop_control:
+    loop_var: site
+
+- name: start and enable fastd service
+  systemd:
+      name: fastd@ff{{ site.name }}.service
+      enabled: yes
+      state: started
+  loop: "{{ sites }}"
+  loop_control:
+    loop_var: site

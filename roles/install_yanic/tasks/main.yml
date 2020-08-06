@@ -1,0 +1,45 @@
+- name: install dependencies for yanic
+  apt:
+    name:
+      - golang
+      - git
+    state: present
+- name: get yanic package
+  shell: go get -v -u github.com/FreifunkBremen/yanic
+  environment:
+    GOPATH: /opt/go/
+
+- name: add yanic user
+  user:
+    name: yanic
+    home: /var/lib/yanic
+    system: yes
+
+- name: create yanic webserver data folder
+  file:
+    path: /var/www/html/data
+    state: directory
+    owner: yanic
+    group: yanic
+- name: create yanic log file
+  file:
+    path: /var/log/yanic.log
+    state: touch
+    owner: yanic
+    group: yanic
+- name: copy yanic.conf file
+  template:
+    src: yanic.conf
+    dest: /etc/yanic.conf
+- name: copy yanic systemd files
+  copy:
+    remote_src: yes
+    src: /opt/go/src/github.com/FreifunkBremen/yanic/contrib/init/linux-systemd/yanic.service
+    dest: /etc/systemd/system/yanic.service
+    mode: preserve
+- name: start and enable yanic.service
+  systemd:
+    name: yanic.service
+    daemon_reload: yes
+    enabled: yes
+    state: started

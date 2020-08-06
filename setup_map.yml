@@ -1,0 +1,13 @@
+# used to install a yanic with a meshviewer on nginx
+# Recommended: install on a backend server and add a reverse proxy in front of
+- name: setup map
+  hosts: map
+  user: root
+  roles:
+    - update_ssh_keys
+    - upgrade_server
+    - install_batman
+    - install_fastd
+    - configure_fastd_map
+    - install_yanic
+    - install_meshviewer

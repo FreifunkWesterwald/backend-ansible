@@ -1,0 +1,7 @@
+- name: add batman netctl config for sites
+  template:
+    src: 60-batman
+    dest: "/etc/network/interfaces.d/60-{{ site.name }}.cfg"
+  loop: "{{ sites }}"
+  loop_control:
+    loop_var: site
