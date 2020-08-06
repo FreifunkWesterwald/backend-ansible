@@ -25,10 +25,12 @@
       #- install_monitoring
       #- install_iperf3
       - install_admin_packages
-#- name: basic uplink config
-#  hosts: uplink
-#  user: root
-#  roles:
+- name: basic uplink config
+  hosts: uplink
+  user: root
+  roles:
+      - update_ssh_keys
+      - upgrade_server
 #      - configure_journald
 #      - configure_sysctl
 #      - configure_iptables
@@ -40,7 +42,6 @@
 #      - install_wireguard
 #      - install_wireguard_backbone
 #      - install_babeld
-#      - install_monitoring
+#      - install_monitoringy
 #      - install_iperf3
-#      - update_ssh_keys
 #      - install_admin_packages

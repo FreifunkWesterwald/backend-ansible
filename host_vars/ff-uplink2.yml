@@ -1,5 +1,4 @@
-ansible_host: 2a01:4f8:a0:826b:2::3
-#ansible_host: 10.0.2.5
+ansible_host: 2a01:4f8:c0c:6bbe::1
 wireguard_bb_name: 'uplink2'
 wireguard_bb_endpoint: '2a01:4f8:a0:826b:2::3'
 wireguard_bb_priv_key: !vault |
