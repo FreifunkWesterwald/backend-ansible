@@ -1,5 +1,5 @@
 - name: install iperf3
-  pacman:
+  apt:
       name: iperf3
       state: present
 

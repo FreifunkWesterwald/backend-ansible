@@ -23,7 +23,7 @@
       - configure_fastd_gw
       - install_mesh-announce
       #- install_monitoring
-      #- install_iperf3
+      - install_iperf3
       - install_admin_packages
 - name: basic uplink config
   hosts: uplink
