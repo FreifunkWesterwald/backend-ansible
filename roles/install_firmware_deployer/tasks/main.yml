@@ -1,0 +1,22 @@
+- name: create deployer folder
+  file:
+    path: /opt/firmware-deployer
+    state: directory
+- name: create scripts
+  copy:
+    src: "{{ item }}"
+    dest: /opt/firmware-deployer/{{ item }}
+    mode: 0755
+  loop:
+    - deploy.sh
+    - prepare.sh
+    - sign.sh
+    - README.md
+- name: create README.md
+  copy:
+    src: "{{ item }}"
+    dest: /opt/firmware-deployer/{{ item }}
+    mode: 0644
+  loop:
+    - README.md
+

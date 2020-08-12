@@ -1,0 +1,11 @@
+- name: website
+  hosts: website
+  user: root
+  roles:
+    # No? as this's a westwoodlabs box?
+    #- update_ssh_keys
+    - upgrade_server
+    - install_firmware_deployer
+    # TODO
+    # - install_website
+    # - install_firmware_chooser
