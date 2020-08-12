@@ -1,3 +1,10 @@
+- name: install dependencies
+  apt:
+    name:
+      - curl
+      - ecdsautils
+      - jq
+    state: present
 - name: create deployer folder
   file:
     path: /opt/firmware-deployer
