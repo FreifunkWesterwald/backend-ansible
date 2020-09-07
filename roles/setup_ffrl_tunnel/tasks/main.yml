@@ -1,20 +1,7 @@
-- name: create netctl config
+- name: create networkconfig config
   template:
-      src: netctl
-      dest: /etc/netctl/{{ item.name }}
-  with_items: "{{ ffrl_peers }}"
-  notify: reenable netctl
-
-- name: enable netctl config
-  command: netctl enable {{ item.name }}
-  args:
-      creates: /etc/systemd/system/multi-user.target.wants/netctl@{{ item.name }}.service
-  with_items: "{{ ffrl_peers }}"
-
-- name: start netctl config
-  systemd:
-      name: netctl@{{ item.name }}.service
-      state: started
+      src: network
+      dest: /etc/network/interfaces.d/70-{{ item.name }}
   with_items: "{{ ffrl_peers }}"
 
 - name: install bird
