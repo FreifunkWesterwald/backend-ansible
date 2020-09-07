@@ -1,0 +1,10 @@
+iface {{ item.name }} inet static
+address {{ item.ip4 }}
+netmask 255.255.255.254
+pre-up ip tunnel add {{ item.name }} mode gre remote {{ item.remote }} local {{ ansible_default_ipv4.address }} ttl 64
+up ip link set mtu 1400 dev {{ item.name }}
+up ip addr add {{ ffrl_ip4 }}/32 dev {{ item.name }}
+post-down ip tunnel del {{ item.name }}
+iface {{ item.name }} inet6 static
+address {{ item.ip6 }}
+netmask 64
