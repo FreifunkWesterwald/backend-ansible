@@ -1,12 +1,12 @@
-ansible_host: 2a01:4f8:140:64e1:0:c01d:cafe:1
+ansible_host: 2a01:4f8:c0c:6bbe::1
 wireguard_bb_name: 'uplink1'
-wireguard_bb_endpoint: '2a01:4f8:151:13cd:2::4'
+wireguard_bb_endpoint: '2a01:4f8:c0c:6bbe::1'
 wireguard_bb_priv_key: ''
 wireguard_bb_pub_key: '1kBuCqepaXZ35LhSYLZJlIBSTYD8Rt+CpvkRrSSQNXM='
 wireguard_bb_ipv4: '10.30.0.1'
 wireguard_bb_ipv6: 'fe80::ffbb:ffbb:1'
 wireguard_bb_port: 10101
-ffrl_ip4: '185.66.195.84'
+ffrl_ip4: '185.66.195.85'
 ffrl_peers:
   - name: 'bbaakber'
     remote: '185.66.195.0'
@@ -43,4 +43,4 @@ ffrl_peers:
     ip4: '100.64.3.245'
     peer_ip4: '100.64.3.244'
     ip6: '2a03:2260:0:204::2'
-    peer_ip6: '2a03:2260:0:204::1'
+    peer_ip6: '2a03:2260:0:204up::1'
