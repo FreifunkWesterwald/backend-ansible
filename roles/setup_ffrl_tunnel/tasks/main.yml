@@ -1,7 +1,7 @@
 - name: create networkconfig config
   template:
       src: network
-      dest: /etc/network/interfaces.d/70-{{ item.name }}
+      dest: /etc/network/interfaces.d/70-{{ item.name }}.cfg
   with_items: "{{ ffrl_peers }}"
 
 - name: install bird
