@@ -1,5 +1,5 @@
 ansible_host: 2a01:4f8:c0c:6bbe::1
-wireguard_bb_name: 'uplink1'
+wireguard_bb_name: 'uplink2'
 wireguard_bb_endpoint: '2a01:4f8:c0c:6bbe::1'
 wireguard_bb_priv_key: ''
 wireguard_bb_pub_key: '1kBuCqepaXZ35LhSYLZJlIBSTYD8Rt+CpvkRrSSQNXM='
