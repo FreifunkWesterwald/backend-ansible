@@ -35,7 +35,6 @@
       - configure_sysctl
       - configure_iptables
       - configure_static_routes
-      - install_cronie
       #- install_nginx
       - install_ntp
       - install_haveged
@@ -44,3 +43,8 @@
       - install_babeld
       - install_iperf3
       - install_admin_packages
+- name: setup ffrl
+  hosts: ffrl_uplink
+  user: root
+  roles:
+    - setup_ffrl_tunnel
