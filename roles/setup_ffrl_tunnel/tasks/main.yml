@@ -6,13 +6,13 @@
 
 - name: install bird
   apt:
-      name: bird
+      name: bird2
       state: present
 
 - name: create bird config
   template:
       src: bird.conf
-      dest: /etc/bird.conf
+      dest: /etc/bird/bird.conf
   notify: reload bird
 
 - name: start and enable bird
