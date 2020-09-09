@@ -1,0 +1,12 @@
+- name: unstable mirror list hinzufügen
+  template:
+      src: unstable.list
+      dest: /etc/apt/sources.list.d/unstable.list
+- name: unstable preferences
+  template:
+    src: unstable.list
+    dest: /etc/apt/preferences.d/unstable.pref
+- name: stable preferences
+  template:
+    src: stable.list
+    dest: /etc/apt/preferences.d/stable.pref
