@@ -47,4 +47,5 @@
   hosts: ffrl_uplink
   user: root
   roles:
+    - setup_unstable_repo
     - setup_ffrl_tunnel
