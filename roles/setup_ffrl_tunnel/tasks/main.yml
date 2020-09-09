@@ -20,7 +20,15 @@
   apt:
       name: bird2
       state: present
-
+- name: creat log datei für bird
+  file:
+    path: /var/log/bird.log
+    state: touch
+- name: Change file ownership, group and permissions
+  file:
+    path: /var/log/bird.log
+    owner: bird
+    group: bird
 - name: create bird config
   template:
       src: bird.conf
