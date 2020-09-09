@@ -43,7 +43,7 @@ COMMIT
 # munin
 -A INPUT -p tcp -m tcp --dport 4949 -j ACCEPT
 # iperf3
--A INPUT -p tcp -m tcp -s 2a03:2260:1016::/48 --dport 5201 -j ACCEPT
+-A INPUT -p tcp -m tcp -s 2a03:2260:200a::/48 --dport 5201 -j ACCEPT
 
 {% if 'fastd' in group_names %}
 # dns
@@ -52,7 +52,7 @@ COMMIT
 # ntp
 -A INPUT -p udp -m udp --dport 123 -j ACCEPT
 # fastd
--A INPUT -s 2a03:2260:1016::/48 -p udp -m udp --dport 10010:10023 -j DROP
+-A INPUT -s 2a03:2260:200a::/48 -p udp -m udp --dport 10010:10023 -j DROP
 -A INPUT -p udp -m udp --dport 10000:10023 -j ACCEPT
 # respondd
 -A INPUT -i bat+ -p udp -m udp --dport 1001 -j ACCEPT
@@ -105,8 +105,8 @@ COMMIT
 {% endfor %}
 {% endif %}
 -A FORWARD -o {{ ansible_default_ipv6.interface }} -j REJECT
--A FORWARD -d 2a03:2260:1016::/48 -p tcp -m tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
--A FORWARD -s 2a03:2260:1016::/48 -p tcp -m tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -d 2a03:2260:200a::/48 -p tcp -m tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+-A FORWARD -s 2a03:2260:200a::/48 -p tcp -m tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
 COMMIT
 *nat
 :PREROUTING ACCEPT [0:0]

@@ -14,7 +14,7 @@ ip -4 rule add to 10.222.32.0/19 table ffww priority 10
 ip -4 rule add to 10.222.64.0/18 table ffww priority 10
 ip -4 rule add to 10.222.128.0/17 table ffww priority 10
 ip -6 rule add to 2001:470:cd45:ff00::/56 table ffww priority 10
-ip -6 rule add to 2a03:2260:1016::/48 table ffww priority 10
+ip -6 rule add to 2a03:2260:200a::/48 table ffww priority 10
 ip -6 rule add to 64:ff9b::/96 table ffww priority 10
 ip -6 rule add to fd62:44e1:da::/48 table ffww priority 10
 

@@ -1,6 +1,6 @@
 <?php
 function sendflux($data) {
-        $url = 'http://[2a03:2260:1016:302:c03:19ff:fe06:285]:8086/write?db=freifunk';
+        $url = 'http://[2a03:2260:200a:302:c03:19ff:fe06:285]:8086/write?db=freifunk';
 
         $options = array(
             'http' => array(
