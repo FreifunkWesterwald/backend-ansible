@@ -4,10 +4,15 @@
       dest: /etc/network/interfaces.d/70-{{ item.name }}.cfg
   with_items: "{{ ffrl_peers }}"
 
-- name: start and enable networkconfig config
+- name: start networkconfig config
+  shell: ifup {{ item.name }}
+  args:
+    executable: /bin/bash
+  with_items: "{{ ffrl_peers }}"
+
+- name: enable networkconfig config
   systemd:
       name: ifup@{{ item.name }}.service
-      state: started
       enabled: yes
   with_items: "{{ ffrl_peers }}"
 
