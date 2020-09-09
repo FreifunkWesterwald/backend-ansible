@@ -4,9 +4,9 @@
       dest: /etc/apt/sources.list.d/unstable.list
 - name: unstable preferences
   template:
-    src: unstable.list
+    src: unstable.pref
     dest: /etc/apt/preferences.d/unstable.pref
 - name: stable preferences
   template:
-    src: stable.list
+    src: stable.pref
     dest: /etc/apt/preferences.d/stable.pref
