@@ -11,5 +11,5 @@
     src: stable.pref
     dest: /etc/apt/preferences.d/stable.pref
 - name: Upgrade all apt packages
-   apt:
-      update_cache: yes
+  apt:
+    update_cache: yes
