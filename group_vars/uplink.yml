@@ -1,5 +1,5 @@
 wireguard_bb_peers:
   - name: 'wwlabs'
     pub_key: 'M1w/4tX99dcw6IuKHZW48tPFSXYH4drLTmjVg1ToTSI='
-    ipv4: '10.222.0.200'
+    ipv4: '10.30.0.200'
     port: 10152
