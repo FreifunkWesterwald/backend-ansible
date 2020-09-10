@@ -16,5 +16,5 @@ wireguard_bb_pub_key: 'ZXnQAi0UCdeubD8EqOGffH0yltVaWjpP1T3n6QHCpl4='
 wireguard_bb_ipv4: '10.30.0.4'
 wireguard_bb_ipv6: 'fe80::ffbb:ffbb:26'
 wireguard_bb_port: 10126
-preferred_uplink: 'uplink2'
+preferred_uplink: 'uplink02'
 
