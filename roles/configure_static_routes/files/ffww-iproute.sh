@@ -4,7 +4,13 @@ ip -4 rule add from all fwmark 0x1 table ffww priority 10
 ip -6 rule add from all fwmark 0x1 table ffww priority 10
 
 #Alles mit Freifunk-IP - woher auch immer - gehört zu Tabelle ffww
-ip -4 rule add to 10.30.0.0/18 table ffww priority 10
+ip -4 rule add to 10.30.1.0/24 table ffww priority 10
+ip -4 rule add to 10.30.2.0/23 table ffww priority 10
+ip -4 rule add to 10.30.4.0/22 table ffww priority 10
+ip -4 rule add to 10.30.8.0/21 table ffww priority 10
+ip -4 rule add to 10.30.16.0/20 table ffww priority 10
+ip -4 rule add to 10.30.32.0/19 table ffww priority 10
+ip -4 rule add to 10.30.64.0/18 table ffww priority 10
 ip -4 rule add to 10.222.1.0/24 table ffww priority 10
 ip -4 rule add to 10.222.2.0/23 table ffww priority 10
 ip -4 rule add to 10.222.4.0/22 table ffww priority 10
