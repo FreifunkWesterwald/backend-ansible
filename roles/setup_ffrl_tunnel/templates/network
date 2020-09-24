@@ -1,3 +1,4 @@
+auto {{ item.name }}
 iface {{ item.name }} inet static
 address {{ item.ip4 }}
 netmask 255.255.255.254

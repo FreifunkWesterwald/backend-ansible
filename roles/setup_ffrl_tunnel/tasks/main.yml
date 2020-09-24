@@ -5,16 +5,7 @@
   with_items: "{{ ffrl_peers }}"
 
 - name: start networkconfig config
-  shell: ifup {{ item.name }}
-  args:
-    executable: /bin/bash
-  with_items: "{{ ffrl_peers }}"
-
-- name: enable networkconfig config
-  systemd:
-      name: ifup@{{ item.name }}.service
-      enabled: yes
-  with_items: "{{ ffrl_peers }}"
+  shell: ifup -a
 
 - name: install bird
   apt:
