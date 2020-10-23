@@ -5,6 +5,7 @@
   user: root
   roles:
     - update_ssh_keys
+    - configure_sshd
     - upgrade_server
     - install_batman
     - install_fastd

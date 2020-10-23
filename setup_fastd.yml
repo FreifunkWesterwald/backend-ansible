@@ -3,6 +3,7 @@
   user: root
   roles:
       - update_ssh_keys
+      - configure_sshd
       - upgrade_server
       - configure_journald
       - configure_sysctl
@@ -30,6 +31,7 @@
   user: root
   roles:
       - update_ssh_keys
+      - configure_sshd
       - upgrade_server
       - configure_journald
       - configure_sysctl
