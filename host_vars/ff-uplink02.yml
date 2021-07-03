@@ -11,7 +11,7 @@ wireguard_bb_priv_key: !vault |
   3265336134653431376636636363366331313766353137393037
 wireguard_bb_pub_key: 'auXTMLpNxA6/phNuimPXsz2AoiASvIYzVuWPnnTGcT8='
 wireguard_bb_ipv4: '10.30.0.2'
-wireguard_bb_ipv6: 'fe80::ffbb:ffbb:1'
+wireguard_bb_ipv6: 'fe80::ffbb:ffbb:2'
 wireguard_bb_port: 10102
 ffrl_ip4: '185.66.195.85'
 ffrl_peers:
