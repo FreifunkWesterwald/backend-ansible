@@ -1,8 +1,17 @@
+- name: Add an apt key by id from a keyserver
+  ansible.builtin.apt_key:
+    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+    id: 1655A0AB68576280
+- name: Add nodejs repository on buster
+  apt_repository:
+    repo: "deb https://deb.nodesource.com/node_12.x buster main"
+    state: present
+    update_cache: yes
 - name: install meshviewer build dependecies
   apt:
     name:
-      - "yarnpkg"
-      - "nginx"
+      - yarnpkg
+      - nginx
 - name: clone meshviewer
   git:
     repo: https://github.com/ffrgb/meshviewer.git
@@ -12,7 +21,10 @@
   yarn:
     executable: /usr/bin/yarnpkg
     path: /opt/meshviewer/
-- name: load batman-adv kernel module at boot
+  # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=933229
+  environment:
+    NODE_PATH: /usr/lib/nodejs:/usr/share/nodejs
+- name: add meshviewer config
   copy:
     src: meshviewer.conf.js
     dest: /opt/meshviewer/config.js
@@ -20,6 +32,9 @@
   shell:
     cmd: yarnpkg gulp
     chdir: /opt/meshviewer
+  # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=933229
+  environment:
+    NODE_PATH: /usr/lib/nodejs:/usr/share/nodejs
 - name: copy meshviewer page content
   copy:
     remote_src: yes
