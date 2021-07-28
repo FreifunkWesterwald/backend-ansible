@@ -84,6 +84,10 @@ COMMIT
 {% for site in sites %}
 -A FORWARD -i bat{{ site.name }} -p udp --dport 10000:10021 -j REJECT
 {% endfor %}
+# wireguard_mesh
+{% for site in sites %}
+-A INPUT -p udp -m udp --dport {{ all_sites[site.name].wireguard_mesh.port }} -j ACCEPT
+{% endfor %}
 {% endif %}
 -A FORWARD -o {{ ansible_default_ipv4.interface }} -j REJECT
 -A FORWARD -d 10.222.0.0/16 -p tcp -m tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
