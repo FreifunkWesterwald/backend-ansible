@@ -1,0 +1,55 @@
+---
+- name: install wgkex dependencies
+  apt:
+      name:
+          - git
+          - python3-virtualenv
+          - python3-setuptools
+          - python3-venv
+          - uwsgi-plugin-python3
+          - uwsgi
+      state: present
+
+- name: clone wgkex repo
+  git:
+      repo: https://github.com/FreifunkWesterwald/wgkex.git
+      dest: /opt/wgkex
+
+- name: create venv
+  command:
+    cmd: "python3 -m venv /opt/wgkex/.venv"
+    creates: /opt/wgkex/.venv
+
+- name: install requirements
+  pip:
+    requirements: /opt/wgkex/requirements.txt
+    virtualenv: /opt/wgkex/.venv
+
+- name: create wgkex-worker service
+  copy:
+    src: wgkex-worker.service
+    dest: /etc/systemd/system/wgkex-worker.service
+    mode: 0644
+- name: copy wgkex.ini uwsgi
+  copy:
+    src: wgkex.ini
+    dest: /etc/uwsgi/apps-enabled/wgkex.ini
+
+- name: install wgkex config
+  template:
+      src: wgkex.yaml.j2
+      dest: /etc/wgkex.yaml
+      mode: 0644
+  notify: restart wgkex-worker
+- name: install wgkex config
+  template:
+    src: wgkex.yaml.j2
+    dest: /opt/wgkex/wgkex.yaml
+    mode: 0644
+  notify: restart wgkex-worker
+
+- name: start and enable wgkex service
+  systemd:
+      name: wgkex-worker
+      state: started
+      enabled: yes
