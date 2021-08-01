@@ -1,0 +1,27 @@
+---
+- name: install nginx
+  apt:
+      name: nginx
+      state: present
+
+- name: copy nginx.conf
+  copy:
+      src: nginx.conf
+      dest: /etc/nginx/nginx.conf
+  notify: reload nginx
+
+- name: add sites-available folder
+  file:
+      path: /etc/nginx/sites-available
+      state: directory
+
+- name: add sites-enabled folder
+  file:
+      path: /etc/nginx/sites-enabled
+      state: directory
+
+- name: start and enable nginx
+  systemd:
+      name: nginx.service
+      enabled: yes
+      state: started

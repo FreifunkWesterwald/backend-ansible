@@ -53,6 +53,7 @@ COMMIT
 # dns
 -A INPUT -p tcp -m tcp --dport 53 -j ACCEPT
 -A INPUT -p udp -m udp --dport 53 -j ACCEPT
+-A INPUT -p tcp -m tcp --dport 80 -j ACCEPT
 #dhcp
 {% for site in sites %}
 -I INPUT -i bat{{ site.name }} -p udp --dport 67:68 --sport 67:68 -j ACCEPT

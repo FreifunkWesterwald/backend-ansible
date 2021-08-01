@@ -1,0 +1,15 @@
+- name: install packages for Mosquitto
+  apt:
+    name:
+      - mosquitto
+      - mosquitto-clients
+    state: present
+
+- name: set password mqtt
+  shell: mosquitto_passwd -b /etc/mosquitto/passwd {{ mqtt_username }} {{ mqtt_password }}
+
+- name: default.conf
+  copy:
+    src: default.conf
+    dest:  /etc/mosquitto/conf.d/default.conf
+  notify: restart mosquitto

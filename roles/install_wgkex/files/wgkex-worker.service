@@ -1,0 +1,12 @@
+[Unit]
+Description=wgkex-worker
+After=network.target
+
+[Service]
+ExecStart=/opt/wgkex/.venv/bin/python /opt/wgkex/wgkex/worker/app.py
+Restart=always
+WorkingDirectory=/opt/wgkex
+Environment=PYTHONPATH=/opt/wgkex
+
+[Install]
+WantedBy=multi-user.target

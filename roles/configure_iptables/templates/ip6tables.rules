@@ -46,6 +46,7 @@ COMMIT
 -A INPUT -p tcp -m tcp -s 2a03:2260:200a::/48 --dport 5201 -j ACCEPT
 
 {% if 'fastd' in group_names %}
+-A INPUT -p tcp -m tcp --dport 80 -j ACCEPT
 # dns
 -A INPUT -p tcp -m tcp --dport 53 -j ACCEPT
 -A INPUT -p udp -m udp --dport 53 -j ACCEPT

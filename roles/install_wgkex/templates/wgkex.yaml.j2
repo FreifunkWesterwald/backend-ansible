@@ -1,0 +1,12 @@
+---
+domains:
+{% for site in sites %}
+  - ff{{ site.name }}
+{% endfor %}
+mqtt:
+  broker_url: "gw01.freifunk-westerwald.de"
+  broker_port: 1883
+  username: "{{ mqtt_username }}"
+  password: "{{ mqtt_password }}"
+  keepalive: 5
+  tls: False

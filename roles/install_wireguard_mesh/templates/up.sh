@@ -8,7 +8,7 @@ batctl meshif bat{{ site.name }} if add vx{{ site.name }}
 
 {% for host in groups['fastd'] %}
 {% for remote_site in hostvars[host]['sites'] if remote_site.name == site.name and remote_site.node_number != site.node_number %}
-bridge fdb append 00:00:00:00:00:00 dev vx{{ site.name }} dst {{ all_sites[remote_site.name].wireguard_mesh.meshaddress[remote_site.node_number-1] }}
+bridge fdb append 00:00:00:00:00:00 dev vx{{ site.name }} dst {{ all_sites[remote_site.name].wireguard_mesh.meshaddress[remote_site.node_number-1] }} via wg{{ site.name }}
 
 {% endfor %}
 {% endfor %}
