@@ -1,0 +1,12 @@
+[Unit]
+Description=wgkex-cleanup on %I
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/wgkex_cleanup.sh "%i"
+WorkingDirectory=/run/
+Type=oneshot
+Restart=no
+
+[Install]
+WantedBy=multi-user.target

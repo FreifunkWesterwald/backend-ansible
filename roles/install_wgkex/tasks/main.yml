@@ -1,0 +1,67 @@
+---
+- name: install wgkex dependencies
+  apt:
+    name:
+      - socat
+    state: present
+
+- name: add wgkex user
+  user:
+    name: wgkex
+    home: /var/lib/wgkex
+    system: yes
+
+- name: install wgkex
+  copy:
+    src: "{{ item }}"
+    dest: /usr/local/bin
+    mode: 0755
+  with_fileglob:
+    - "files/wgkex_*.sh"
+
+- name: make sure /etc/sudoers.d/ is enabled
+  lineinfile:
+    path: /etc/sudoers
+    state: present
+    regexp: '^#includedir /etc/sudoers.d'
+    line: '#includedir /etc/sudoers.d'
+    validate: "visudo -cf %s"
+
+- name: allow wgkex to execute wgkex_handler.sh as root
+  copy:
+    src: wgkex.sudo
+    dest: /etc/sudoers.d/wgkex
+    validate: "visudo -cf %s"
+    mode: 0440
+
+- name: create wgkex-worker service
+  template:
+    src: wgkex-worker.service
+    dest: /etc/systemd/system/wgkex-worker.service
+    mode: 0644
+
+- name: wgkex-cleanup service
+  copy:
+    src: wgkex-cleanup@.service
+    dest: /etc/systemd/system/wgkex-cleanup@.service
+    mode: 0644
+
+- name: wgkex-cleanup timer
+  copy:
+    src: wgkex-cleanup@.timer
+    dest: /etc/systemd/system/wgkex-cleanup@.timer
+    mode: 0644
+
+- name: start and enable wgkex service
+  systemd:
+    daemon_reload: yes
+    name: wgkex-worker
+    state: started
+    enabled: yes
+
+- name: add wgkex-cleanup timer
+  systemd:
+    name: "wgkex-cleanup@{{ item.name }}.timer"
+    state: started
+    enabled: yes
+  with_items: "{{ sites }}"

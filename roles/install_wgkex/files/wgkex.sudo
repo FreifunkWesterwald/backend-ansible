@@ -1,0 +1,6 @@
+User_Alias WGKEX_USERS = wgkex
+
+# only allow wgkex_handler.sh and only without any arguments
+Cmnd_Alias WGKEX_CMD = /usr/local/bin/wgkex_handler.sh ""
+Defaults!WGKEX_CMD env_keep+=SOCAT_*
+WGKEX_USERS ALL = (root) NOPASSWD: WGKEX_CMD

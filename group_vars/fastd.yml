@@ -84,6 +84,7 @@ all_sites:
         - 'ff2FfJ2HGMubN4Bd9YhScjvHm54M3oLQ8TeMgiYJiBE='
         - '5iWnfozwfFbtXD8BCuyQwV3/H5GDtOHL4jjy+n3r8Qs='
       port: 10010
+      kex_port: 10011
       vxlan_id: 4641648
       address:
         - 'fe80::5757:bb:1'
