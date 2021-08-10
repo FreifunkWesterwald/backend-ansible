@@ -13,4 +13,4 @@
   template:
       src: named.conf
       dest: /etc/bind/named.conf
- # notify: reload bind9
+  notify: reload bind9
