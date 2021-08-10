@@ -1,5 +1,6 @@
 - name: setup fastds
   hosts: fastd
+  serial: 1
   user: root
   roles:
       - update_ssh_keys
@@ -28,6 +29,7 @@
       - install_admin_packages
 - name: basic uplink config
   hosts: uplink
+  serial: 1
   user: root
   roles:
       - update_ssh_keys
@@ -47,6 +49,7 @@
       - install_admin_packages
 - name: setup ffrl
   hosts: ffrl_uplink
+  serial: 1
   user: root
   roles:
     - setup_unstable_repo

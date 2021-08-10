@@ -1,3 +1,14 @@
+- name: install bind
+  apt:
+    name: bind9
+
+- name: create named zone backup folder
+  file:
+    path: /var/named/bak
+    state: directory
+    owner: bind
+    group: bind
+
 - name: bind config
   template:
       src: named.conf
