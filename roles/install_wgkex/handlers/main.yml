@@ -1,5 +1,0 @@
----
-- name: restart wgkex-worker
-  systemd:
-      name: wgkex-worker.service
-      state: restarted

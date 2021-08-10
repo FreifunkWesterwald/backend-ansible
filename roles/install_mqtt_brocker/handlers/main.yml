@@ -1,4 +1,0 @@
-- name: restart mosquitto
-  systemd:
-    name: mosquitto.service
-    state: restarted
