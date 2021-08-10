@@ -52,6 +52,18 @@
     dest: /etc/systemd/system/wgkex-cleanup@.timer
     mode: 0644
 
+- name: /etc/wgkex
+  file:
+    path: /etc/wgkex
+    state: directory
+    mode: 755
+
+- name: wgkex disallowed keys
+  template:
+    src: wgkex_disallowed_keys
+    dest: /etc/wgkex/disallowed_keys
+    mode: 0644
+
 - name: start and enable wgkex service
   systemd:
     daemon_reload: yes

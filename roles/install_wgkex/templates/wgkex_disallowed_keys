@@ -1,0 +1,5 @@
+{% for site in sites %}
+{% for key in all_sites[site.name].wireguard_mesh.pub_key %}
+{{ key }}
+{% endfor %}
+{% endfor %}

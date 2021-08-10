@@ -37,6 +37,12 @@ if ! echo "$WG_PUBKEY" | grep -E '^[A-Za-z0-9+/]{42}[A|E|I|M|Q|U|Y|c|g|k|o|s|w|4
   exit 1
 fi
 
+if grep "$WG_PUBKEY" /etc/wgkex/disallowed_keys >/dev/null ; then
+  echo ERR: PROHIBITED_WGKEY
+  echo "wireguard key '$WG_PUBKEY' is contained in disallowed_keys list" >&2
+  exit 1
+fi
+
 BRIDGE="$(echo "$DOMAIN" | sed 's/^ff//')"
 MACADDR="$(echo "$WG_PUBKEY" | md5sum | sed 's/^\(..\)\(..\)\(..\)\(..\)\(..\).*$/02:\1:\2:\3:\4:\5/')"
 # calculate link-local address using EUI-64 method (7th bit inverted -> static '02' converts to '00' and is thus omitted.
