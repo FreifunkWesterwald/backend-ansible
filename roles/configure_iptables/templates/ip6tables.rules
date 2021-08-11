@@ -54,7 +54,7 @@ COMMIT
 # fastd, wireguad, wgkex
 -A INPUT -s 2a03:2260:200a::/48 -p udp -m udp --dport 10010:10023 -j DROP
 -A INPUT -p udp -m udp --dport 10000:10023 -j ACCEPT
--A INPUT -p tcp -m tcp --dport 10011 -j ACCEPT
+-A INPUT -p tcp -m tcp --dport 10012 -j ACCEPT
 # respondd
 -A INPUT -i bat+ -p udp -m udp --dport 1001 -j ACCEPT
 # wireguard_mesh

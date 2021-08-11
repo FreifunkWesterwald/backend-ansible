@@ -3,7 +3,7 @@ Description=wgkex-worker
 After=network.target
 
 [Service]
-Environment='LISTEN_IP=0.0.0.0' 'LISTEN_PORT={{ all_sites[sites[0].name].wireguard_mesh.kex_port }}'
+Environment='LISTEN_PORT={{ all_sites[sites[0].name].wireguard_mesh.kex_port }}'
 ExecStart=/usr/local/bin/wgkex_server.sh
 Type=simple
 Restart=always
