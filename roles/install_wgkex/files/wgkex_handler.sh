@@ -48,6 +48,9 @@ MACADDR="$(echo "$WG_PUBKEY" | md5sum | sed 's/^\(..\)\(..\)\(..\)\(..\)\(..\).*
 # calculate link-local address using EUI-64 method (7th bit inverted -> static '02' converts to '00' and is thus omitted.
 IPV6="$(echo "$MACADDR" | sed 's/^\(..\):\(..\):\(..\):\(..\):\(..\):\(..\)$/fe80::\2:\3ff:fe\4:\5\6/')"
 echo "configuring key '$WG_PUBKEY' to peer '$IPV6' with vxlan mac '$MACADDR'" >&2
+# remove peer first, to clear seq-number state
+# otherwise the connection might not work, if the clients clock jumped
+wg set "wg$BRIDGE" peer "$WG_PUBKEY" remove
 wg set "wg$BRIDGE" peer "$WG_PUBKEY" allowed-ips "$IPV6/128"
 bridge fdb append 00:00:00:00:00:00 dev "vx$BRIDGE" dst "$IPV6" via "wg$BRIDGE"
 
