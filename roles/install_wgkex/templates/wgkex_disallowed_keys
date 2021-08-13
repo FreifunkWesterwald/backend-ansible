@@ -3,3 +3,6 @@
 {{ key }}
 {% endfor %}
 {% endfor %}
+{% for host in groups['map'] %}
+{{ hostvars[host].wireguard.pub_key}}
+{% endfor %}
