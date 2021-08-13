@@ -8,7 +8,10 @@
     - configure_sshd
     - upgrade_server
     - install_batman
-    - install_fastd
-    - configure_fastd_map
+    #- install_fastd
+    - install_wireguard
+    - install_wireguard_mesh_map
+    #- configure_fastd_map
     - install_yanic
     - install_meshviewer
+    - install_admin_packages

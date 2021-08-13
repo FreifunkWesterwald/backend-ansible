@@ -12,6 +12,13 @@ bridge fdb append 00:00:00:00:00:00 dev vx{{ site.name }} dst {{ all_sites[remot
 
 {% endfor %}
 {% endfor %}
+
+
+{% for host in groups['map'] %}
+bridge fdb append 00:00:00:00:00:00 dev vx{{ site.name }} dst {{ hostvars[host].wireguard.address  }} via wg{{ site.name }}
+{% endfor %}
+
+
 batctl meshif bat{{ site.name }} gw server 1000000/1000000
 batctl meshif bat{{ site.name }} it 10000
 batctl meshif bat{{ site.name }} mm 1
@@ -19,3 +26,4 @@ echo 64 > /sys/class/net/bat{{ site.name }}/mesh/hop_penalty
 ifup bat{{ site.name }}
 #systemctl restart isc-dhcp-server.service
 systemctl restart bind9.service
+
