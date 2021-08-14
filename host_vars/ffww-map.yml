@@ -1,12 +1,4 @@
 ansible_host: 2a01:4f8:140:64e1:0:c01d:cafe:3
-site:
-  name: "ww01"
-fastd:
-  secret: "18bacac7b149888d5a473d7bdbcbf2386cc33dbef2a4b86aaa12714c6c25cd72"
-gateway:
-  hostname: "gw01.freifunk-westerwald.de"
-  port: 10001
-  pub_key: "ada8088cd5a64b941c50eb6ba9172317fe7aaa1610b93605480cddd9b6d523a3"
 sites:
   - name: 'ww01'
 wireguard:
