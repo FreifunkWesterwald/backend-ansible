@@ -1,0 +1,23 @@
+---
+- name: install wg linkstat dependencies
+  apt:
+    name:
+      - curl
+    state: present
+- name: install wg linkstat
+  copy:
+    src: "wg_linkstat.sh"
+    dest: /usr/local/bin/
+    mode: 0755
+- name: install wg linkstat service
+  copy:
+    src: "wg-linkstat@.service"
+    dest: /etc/systemd/system/
+    mode: 0755
+- name: start and enable wg linkstat service
+  systemd:
+    daemon_reload: yes
+    name: "wg-linkstat@wg{{ item.name }}"
+    state: started
+    enabled: yes
+  with_items: "{{ sites }}"

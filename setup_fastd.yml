@@ -21,6 +21,7 @@
       - install_wireguard_mesh
       - install_wireguard_backbone
       - install_wgkex
+      - install_wglinkstat
       - install_babeld
       - install_fastd
       - configure_fastd_gw
