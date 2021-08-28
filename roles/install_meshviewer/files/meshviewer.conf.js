@@ -33,6 +33,10 @@ module.exports = function () {
         'domainNames': [
             {
                 'domain': 'ffww',
+                'name': 'Westerwald(fastd)'
+            },
+            {
+                'domain': 'ffww01',
                 'name': 'Westerwald'
             }
         ],
