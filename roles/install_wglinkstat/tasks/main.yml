@@ -5,10 +5,11 @@
       - curl
     state: present
 - name: install wg linkstat
-  copy:
-    src: "wg_linkstat.sh"
-    dest: /usr/local/bin/
+  template:
+    src: wg_linkstat.sh
+    dest: /usr/local/bin/wg_linkstat.sh
     mode: 0755
+
 - name: install wg linkstat service
   copy:
     src: "wg-linkstat@.service"

@@ -16,3 +16,4 @@
     - install_meshviewer
     - install_admin_packages
     - install_influxdb
+    - install_grafana
