@@ -27,7 +27,7 @@
     password: "{{ influx.admin.password }}"
     grants:
       - database: '{{ influx.db }}'
-        privilege: 'WRITE'
+        privilege: 'ALL'
 
 - name: enable auth
   lineinfile:
