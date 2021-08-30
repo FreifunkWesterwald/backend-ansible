@@ -1,0 +1,42 @@
+- name: install influx
+  apt:
+    name: influxdb
+    state: present
+
+- name: install influx
+  apt:
+    name: python-requests
+    state: present
+- name: install influx
+  apt:
+    name: python-influxdb
+    state: present
+- name: Create an admin user on influxdb
+  community.general.influxdb_user:
+    user_name: admin
+    user_password: '{{ influx.admin }}'
+    username: "admin"
+    password: "{{ influx.admin }}"
+    admin: yes
+- name: Create database using custom credentials
+  community.general.influxdb_database:
+    database_name: "ffww"
+    username: "admin"
+    password: "{{ influx.admin }}"
+- name: Create an freifunk user on influxdb
+  community.general.influxdb_user:
+    user_name: '{{ influx.username }}'
+    user_password: '{{ influx.password }}'
+    admin: no
+    username: "admin"
+    password: "{{ influx.admin }}"
+    grants:
+      - database: 'ffww'
+        privilege: 'WRITE'
+      - database: 'ffww'
+        privilege: 'READ'
+- name: copy influxdb config
+  copy:
+    src: influxdb.conf
+    dest: /etc/systemd/system/influxdb.conf
+  notify: restart influxdb
