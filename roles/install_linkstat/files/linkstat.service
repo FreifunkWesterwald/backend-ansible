@@ -1,0 +1,12 @@
+[Unit]
+Description=collect link statistics
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/linkstat.sh
+WorkingDirectory=/run/
+Type=simple
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

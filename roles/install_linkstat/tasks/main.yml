@@ -1,0 +1,22 @@
+---
+- name: install linkstat dependencies
+  apt:
+    name:
+      - curl
+    state: present
+- name: install linkstat
+  copy:
+    src: "linkstat.sh"
+    dest: /usr/local/bin/
+    mode: 0755
+- name: install linkstat service
+  copy:
+    src: "linkstat.service"
+    dest: /etc/systemd/system/
+    mode: 0755
+- name: start and enable linkstat service
+  systemd:
+    daemon_reload: yes
+    name: "linkstat"
+    state: started
+    enabled: yes
