@@ -22,6 +22,7 @@
       - install_wireguard_backbone
       - install_wgkex
       - install_wglinkstat
+      - install_linkstat
       - install_babeld
       - install_fastd
       - configure_fastd_gw
@@ -49,6 +50,7 @@
       - install_babeld
       - install_iperf3
       - install_admin_packages
+      - install_linkstat
 - name: setup ffrl
   hosts: ffrl_uplink
   serial: 1
