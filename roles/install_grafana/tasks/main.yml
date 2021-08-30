@@ -1,5 +1,6 @@
-- name: add grafana gpg key
-  shell: curl https://packages.grafana.com/gpg.key | sudo apt-key add -
+- name: Add an apt key by id from a keyserver
+  apt_key:
+    url: https://packages.grafana.com/gpg.key
 
 - name: add grafana repo
   apt_repository:
@@ -12,6 +13,21 @@
     name: grafana
     state: present
     update_cache: yes
+
+- name: set external grafana hostname
+  ini_file:
+    path: /etc/grafana/grafana.ini
+    section: server
+    option: domain
+    value: "{{ grafana.domain }}"
+  notify: restart grafana-server
+- name: set grafana url pattern
+  ini_file:
+    path: /etc/grafana/grafana.ini
+    section: server
+    option: root_url
+    value: "{{ grafana.root_url }}"
+  notify: restart grafana-server
 
 - name: Enable and start grafana service
   service:

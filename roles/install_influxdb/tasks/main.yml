@@ -1,42 +1,39 @@
 - name: install influx
   apt:
-    name: influxdb
+    name:
+      - influxdb
+      - python-requests
+      - python-influxdb
     state: present
 
-- name: install influx
-  apt:
-    name: python-requests
-    state: present
-- name: install influx
-  apt:
-    name: python-influxdb
-    state: present
 - name: Create an admin user on influxdb
   community.general.influxdb_user:
-    user_name: admin
-    user_password: '{{ influx.admin }}'
-    username: "admin"
-    password: "{{ influx.admin }}"
+    user_name: "{{ influx.admin.username }}"
+    user_password: "{{ influx.admin.password }}"
+    username: "{{ influx.admin.username }}"
+    password: "{{ influx.admin.password }}"
     admin: yes
 - name: Create database using custom credentials
   community.general.influxdb_database:
-    database_name: "ffww"
-    username: "admin"
-    password: "{{ influx.admin }}"
+    database_name: "{{ influx.db }}"
+    username: "{{ influx.admin.username }}"
+    password: "{{ influx.admin.password }}"
 - name: Create an freifunk user on influxdb
   community.general.influxdb_user:
-    user_name: '{{ influx.username }}'
-    user_password: '{{ influx.password }}'
+    user_name: "{{ influx.username }}"
+    user_password: "{{ influx.password }}"
     admin: no
-    username: "admin"
-    password: "{{ influx.admin }}"
+    username: "{{ influx.admin.username }}"
+    password: "{{ influx.admin.password }}"
     grants:
-      - database: 'ffww'
+      - database: '{{ influx.db }}'
         privilege: 'WRITE'
-      - database: 'ffww'
+      - database: '{{ influx.db }}'
         privilege: 'READ'
-- name: copy influxdb config
-  copy:
-    src: influxdb.conf
-    dest: /etc/systemd/system/influxdb.conf
+
+- name: enable auth
+  lineinfile:
+    path: /etc/influxdb/influxdb.conf
+    regexp: 'auth-enabled ='
+    line: '  auth-enabled = true'
   notify: restart influxdb

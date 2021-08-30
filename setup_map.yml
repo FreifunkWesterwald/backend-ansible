@@ -12,8 +12,8 @@
     - install_wireguard
     - install_wireguard_mesh_map
     #- configure_fastd_map
+    - install_influxdb
     - install_yanic
     - install_meshviewer
     - install_admin_packages
-    - install_influxdb
     - install_grafana
