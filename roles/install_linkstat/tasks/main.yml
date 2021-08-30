@@ -5,15 +5,17 @@
       - curl
     state: present
 - name: install linkstat
-  template:
+  copy:
     src: "linkstat.sh"
     dest: /usr/local/bin/
     mode: 0755
+  notify: restart linkstat
 - name: install linkstat service
-  copy:
+  template:
     src: linkstat.service
     dest: /etc/systemd/system/linkstat.service
     mode: 0755
+  notify: restart linkstat
 - name: start and enable linkstat service
   systemd:
     daemon_reload: yes

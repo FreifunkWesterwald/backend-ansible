@@ -1,0 +1,16 @@
+[Unit]
+Description=collect link statistics
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/linkstat.sh
+Environment=INFLUX_USER={{ hostvars['ffww-map'].influx.username }}
+Environment=INFLUX_PASSWORD={{ hostvars['ffww-map'].influx.password }}
+Environment=INFLUX_BASE_URL={{ hostvars['ffww-map'].influx.baseUrl }}
+Environment=INFLUX_DB={{ hostvars['ffww-map'].influx.db }}
+WorkingDirectory=/run/
+Type=simple
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

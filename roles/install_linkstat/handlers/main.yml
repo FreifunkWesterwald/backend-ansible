@@ -1,0 +1,4 @@
+- name: restart linkstat
+  systemd:
+    name: linkstat.service
+    state: restarted

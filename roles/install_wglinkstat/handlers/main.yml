@@ -1,0 +1,5 @@
+- name: restart wg linkstat
+  systemd:
+    name: "wg-linkstat@{{ item.name }}.service"
+    state: restarted
+  with_items: "{{ sites }}"

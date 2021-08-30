@@ -14,6 +14,7 @@ wireguard:
   pub_key: TfxZpULgWLLg63D0Y+JAnejlFdYKNJi6C3AukoiBcyw=
   macaddress: 02:de:5d:b8:5b:59
 influx:
+  baseUrl: https://influx.freifunk-westerwald.de
   db: ffww
   admin:
     username: admin
