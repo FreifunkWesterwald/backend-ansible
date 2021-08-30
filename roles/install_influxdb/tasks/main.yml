@@ -28,8 +28,6 @@
     grants:
       - database: '{{ influx.db }}'
         privilege: 'WRITE'
-      - database: '{{ influx.db }}'
-        privilege: 'READ'
 
 - name: enable auth
   lineinfile:
