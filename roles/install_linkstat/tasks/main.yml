@@ -5,14 +5,14 @@
       - curl
     state: present
 - name: install linkstat
-  copy:
+  template:
     src: "linkstat.sh"
     dest: /usr/local/bin/
     mode: 0755
 - name: install linkstat service
   copy:
-    src: "linkstat.service"
-    dest: /etc/systemd/system/
+    src: linkstat.service
+    dest: /etc/systemd/system/linkstat.service
     mode: 0755
 - name: start and enable linkstat service
   systemd:
