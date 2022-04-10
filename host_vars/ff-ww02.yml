@@ -1,4 +1,4 @@
-ansible_host: 2a01:4f8:140:64e1:0:c01d:cafe:2
+ansible_host: 2a01:4f8:173:d09:0:c01d:cafe:2
 sites:
   - name: 'ww01'
     node_number: 2
