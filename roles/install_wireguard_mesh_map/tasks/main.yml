@@ -4,20 +4,17 @@
       dest: /etc/wireguard/wg.conf
       mode: 0400
 
-
 - name: create wireguard up scripts for sites
   template:
       src: up.sh
       dest: /etc/wireguard/up.sh
       mode: 0744
 
-
 - name: create wireguard down scripts for sites
   template:
       src: down.sh
       dest: /etc/wireguard/down.sh
       mode: 0744
-
 
 - name: start and enable wireguard mesh
   systemd:

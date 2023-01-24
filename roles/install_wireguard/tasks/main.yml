@@ -1,8 +1,8 @@
-- name: Add WireGuard repository on buster or earlier
-  apt_repository:
-    repo: "deb http://deb.debian.org/debian buster-backports main"
-    state: present
-    update_cache: yes
+#- name: Add WireGuard repository on buster or earlier
+#  apt_repository:
+#    repo: "deb http://deb.debian.org/debian buster-backports main"
+#    state: present
+#    update_cache: yes
 - name: Get architecture
   command: "dpkg --print-architecture"
   register: dpkg_arch

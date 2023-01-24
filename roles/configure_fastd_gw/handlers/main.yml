@@ -1,4 +1,0 @@
-- name: restart fastdww
-  systemd:
-      name: fastd@ffww.service
-      state: restarted

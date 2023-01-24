@@ -2,8 +2,8 @@
   apt:
     name:
       - influxdb
-      - python-requests
-      - python-influxdb
+      - python3-requests
+      - python3-influxdb
     state: present
 
 - name: Create an admin user on influxdb
