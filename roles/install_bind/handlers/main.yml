@@ -1,4 +1,4 @@
 - name: reload bind9
   systemd:
-      name: named.service
+      name: bind9.service
       state: reloaded
