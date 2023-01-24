@@ -24,8 +24,6 @@
       - install_wglinkstat
       - install_linkstat
       - install_babeld
-      - install_fastd
-      - configure_fastd_gw
       - install_mesh-announce
       #- install_monitoring
       - install_iperf3

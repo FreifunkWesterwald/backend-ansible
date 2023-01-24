@@ -1,3 +1,0 @@
-key "{{ gateway.pub_key }}";
-
-remote ipv4 "{{ gateway.hostname }}" port {{ gateway.port }};
