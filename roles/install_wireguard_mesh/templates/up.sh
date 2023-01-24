@@ -24,6 +24,5 @@ batctl meshif bat{{ site.name }} it 10000
 batctl meshif bat{{ site.name }} mm 1
 echo 64 > /sys/class/net/bat{{ site.name }}/mesh/hop_penalty
 ifup bat{{ site.name }}
-#systemctl restart isc-dhcp-server.service
+systemctl restart isc-dhcp-server.service
 systemctl restart bind9.service
-
