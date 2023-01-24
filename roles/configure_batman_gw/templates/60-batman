@@ -1,7 +1,7 @@
 auto bat{{ site.name }}
 iface bat{{ site.name }} inet static
     address {{ all_sites[site.name].bat.ipv4[site.node_number-1] }}/{{ all_sites[site.name].bat.ipv4_cidr }}
-    pre-up /usr/sbin/ip link add bat{{ site.name }} type batadv
+    pre-up /usr/sbin/ip link add bat{{ site.name }} address {{ all_sites[site.name].bat.mac[site.node_number-1] }} type batadv
     up /usr/local/bin/ffww-iproute{{ site.name }}-up.sh
     down /usr/local/bin/ffww-iproute{{ site.name }}-down.sh
 iface bat{{ site.name }} inet6 static

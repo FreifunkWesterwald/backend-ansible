@@ -1,6 +1,4 @@
 #!/bin/bash
-ip link set address {{ all_sites[site.name].bat.mac[site.node_number-1] }} dev bat{{ site.name }}
-
 # All traffic coming from the batman interface or any
 # of our freifunk IPs is to be processed via the ffww table
 ip -4 rule add iif bat{{ site.name }} table ffww priority 10
