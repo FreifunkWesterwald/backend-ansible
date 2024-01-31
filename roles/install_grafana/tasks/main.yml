@@ -1,6 +1,6 @@
 - name: Add an apt key by id from a keyserver
   apt_key:
-    url: https://packages.grafana.com/gpg.key
+    url: https://apt.grafana.com/gpg.key
 
 - name: add grafana repo
   apt_repository:
