@@ -4,6 +4,7 @@ After=network.target
 
 [Service]
 Environment='LISTEN_PORT={{ all_sites[sites[0].name].wireguard_mesh.kex_port }}'
+Environment='MAX_CHILDREN=100'
 ExecStart=/usr/local/bin/wgkex_server.sh
 Type=simple
 Restart=always
