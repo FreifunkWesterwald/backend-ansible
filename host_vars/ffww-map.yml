@@ -1,4 +1,4 @@
-ansible_host: 2a01:4f8:173:d09:0:c01d:cafe:3
+ansible_host: 2a01:4f8:212:4188:0:c01d:cafe:3
 sites:
   - name: 'ww01'
 wireguard:

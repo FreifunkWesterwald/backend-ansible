@@ -8,6 +8,26 @@
   git:
       repo: https://github.com/FreifunkMYK/mesh-announce.git
       dest: /opt/mesh-announce
+# TODO: Need to be fixed
+# workaround: /opt/mesh-announce/providers/nodeinfo/software/fastd/enabled.py return value to false
+#Jan 24 20:58:30 gw02 respondd.py[963]: FileNotFoundError: [Errno 2] No such file or directory: 'fastd'
+#Jan 24 20:59:30 gw02 respondd.py[963]: Traceback (most recent call last):
+#Jan 24 20:59:30 gw02 respondd.py[963]:   File "/opt/mesh-announce/providers/__init__.py", line 139, in call
+#Jan 24 20:59:30 gw02 respondd.py[963]:     _set_value(ret, source.path, source.call(env))
+#Jan 24 20:59:30 gw02 respondd.py[963]:   File "/opt/mesh-announce/providers/__init__.py", line 108, in call
+#Jan 24 20:59:30 gw02 respondd.py[963]:     result = self.source.call(*args)
+#Jan 24 20:59:30 gw02 respondd.py[963]:   File "/opt/mesh-announce/providers/nodeinfo/software/fastd/version.py", line 6, in call
+#Jan 24 20:59:30 gw02 respondd.py[963]:     return call(['fastd','-v'])[0].split(' ')[1]
+#Jan 24 20:59:30 gw02 respondd.py[963]:   File "/opt/mesh-announce/providers/util.py", line 4, in call
+#Jan 24 20:59:30 gw02 respondd.py[963]:     output = subprocess.check_output(cmdline)
+#Jan 24 20:59:30 gw02 respondd.py[963]:   File "/usr/lib/python3.9/subprocess.py", line 424, in check_output
+#Jan 24 20:59:30 gw02 respondd.py[963]:     return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+#Jan 24 20:59:30 gw02 respondd.py[963]:   File "/usr/lib/python3.9/subprocess.py", line 505, in run
+#Jan 24 20:59:30 gw02 respondd.py[963]:     with Popen(*popenargs, **kwargs) as process:
+#Jan 24 20:59:30 gw02 respondd.py[963]:   File "/usr/lib/python3.9/subprocess.py", line 951, in __init__
+#Jan 24 20:59:30 gw02 respondd.py[963]:     self._execute_child(args, executable, preexec_fn, close_fds,
+#Jan 24 20:59:30 gw02 respondd.py[963]:   File "/usr/lib/python3.9/subprocess.py", line 1823, in _execute_child
+#Jan 24 20:59:30 gw02 respondd.py[963]:     raise child_exception_type(errno_num, err_msg, err_filename)
 
 - name: create respondd service
   template:

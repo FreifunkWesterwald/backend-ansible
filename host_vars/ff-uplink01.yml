@@ -1,6 +1,6 @@
-ansible_host: 2a01:4f8:173:d09:0:c01d:cafe:1
+ansible_host: 2a01:4f8:212:4188:0:c01d:cafe:1
 wireguard_bb_name: 'uplink01'
-wireguard_bb_endpoint: '2a01:4f8:173:d09:0:c01d:cafe:1'
+wireguard_bb_endpoint: '2a01:4f8:212:4188:0:c01d:cafe:1'
 wireguard_bb_priv_key: !vault |
   $ANSIBLE_VAULT;1.1;AES256
   36626364313662313431323431663663313162303931666535393063623838376631373233326237

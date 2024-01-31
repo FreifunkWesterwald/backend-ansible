@@ -7,7 +7,7 @@
 - name: install build dependencies for batman-adv kernel module
   apt:
     name:
-      - "linux-headers-{{ kernel_header_version }}"
+      - "linux-headers-{{ kernel_header_version }}" # todo fix kernel header version to install
       - "build-essential"
       - "dkms"
     state: present
