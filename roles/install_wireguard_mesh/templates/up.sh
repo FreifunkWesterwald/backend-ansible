@@ -22,7 +22,7 @@ bridge fdb append 00:00:00:00:00:00 dev vx{{ site.name }} dst {{ hostvars[host].
 batctl meshif bat{{ site.name }} gw server 1000000/1000000
 batctl meshif bat{{ site.name }} it 10000
 batctl meshif bat{{ site.name }} mm 1
-echo 64 > /sys/class/net/bat{{ site.name }}/mesh/hop_penalty
+batctl meshif bat{{ site.name }} hp 64
 ifup bat{{ site.name }}
 systemctl restart isc-dhcp-server.service
 systemctl restart bind9.service
