@@ -5,7 +5,7 @@
     upgrade: dist
 - name: Check if a reboot is needed for Debian and Ubuntu boxes
   register: reboot_required_file
-  stat: path=/var/run/reboot-required get_md5=no
+  stat: path=/var/run/reboot-required get_checksum=no
 - name: Reboot the Debian or Ubuntu server
   reboot:
     msg: "Reboot initiated by Ansible due to kernel updates"
