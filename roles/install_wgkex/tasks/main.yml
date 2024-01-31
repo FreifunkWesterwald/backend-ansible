@@ -23,8 +23,8 @@
   lineinfile:
     path: /etc/sudoers
     state: present
-    regexp: '^#includedir /etc/sudoers.d'
-    line: '#includedir /etc/sudoers.d'
+    regexp: '^@includedir /etc/sudoers.d'
+    line: '@includedir /etc/sudoers.d'
     validate: "visudo -cf %s"
 
 - name: allow wgkex to execute wgkex_handler.sh as root
