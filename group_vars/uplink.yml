@@ -3,3 +3,7 @@ wireguard_bb_peers:
     pub_key: 'M1w/4tX99dcw6IuKHZW48tPFSXYH4drLTmjVg1ToTSI='
     ipv4: '10.30.0.200'
     port: 10152
+  - name: 'wamp'
+    pub_key: 'ZKst4Cylw2kKGKzNOKR3MoIu3v4+2HY+DHES5iwvNkw='
+    ipv4: '10.30.0.201'
+    port: 10153
