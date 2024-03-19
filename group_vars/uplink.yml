@@ -4,6 +4,11 @@ wireguard_bb_peers:
     ipv4: '10.30.0.200'
     port: 10152
   - name: 'wamp'
+    # uses:
+    #  - 10.222.42.0/24
+    #  - 2a03:2260:200a:de2a::/64
+    #  - 10.222.128.0/17
+    #  - 2a03:2260:200a:de80::/64
     pub_key: 'ZKst4Cylw2kKGKzNOKR3MoIu3v4+2HY+DHES5iwvNkw='
     # not needed anywhere, just for documentation
     priv_key: !vault |

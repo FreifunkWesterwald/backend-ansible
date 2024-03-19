@@ -27,6 +27,7 @@
 {% endfor %}
 {% for peer in wireguard_bb_peers %}
 -A PREROUTING -i bb{{ peer.name }} -j MARK --set-xmark 0x1/0xffffffff
+-A INPUT -p udp --dport {{ peer.port }} -j ACCEPT
 {% endfor %}
 {% endif %}
 {% if 'nat64' in group_names %}
